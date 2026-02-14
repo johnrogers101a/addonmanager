@@ -24,7 +24,7 @@ param()
 $ErrorActionPreference = 'Stop'
 
 # Get script directory for function calls
-$WowScriptRoot = $PSScriptRoot
+$script:WowScriptRoot = $PSScriptRoot
 
 # Primary WoW Management Functions
 function Invoke-WowDownload {
@@ -36,7 +36,7 @@ function Invoke-WowDownload {
     .PARAMETER WhatIf
         Preview changes without applying
     #>
-    $scriptPath = Join-Path $WowScriptRoot "Invoke-WowDownload.ps1"
+    $scriptPath = Join-Path $script:WowScriptRoot "Invoke-WowDownload.ps1"
     & $scriptPath @args
 }
 
@@ -48,7 +48,7 @@ function Invoke-WowUpload {
         Uploads all WTF configurations from repository to Azure.
         Creates Azure resources if they don't exist (idempotent).
     #>
-    $scriptPath = Join-Path $WowScriptRoot "Invoke-WowUpload.ps1"
+    $scriptPath = Join-Path $script:WowScriptRoot "Invoke-WowUpload.ps1"
     & $scriptPath @args
 }
 
@@ -64,7 +64,7 @@ function New-WowConfig {
     .DESCRIPTION
         Interactive wizard that detects WoW installations and creates wow.json.
     #>
-    $scriptPath = Join-Path $WowScriptRoot "New-WowConfig.ps1"
+    $scriptPath = Join-Path $script:WowScriptRoot "New-WowConfig.ps1"
     & $scriptPath @args
 }
 
@@ -73,7 +73,7 @@ function Get-WowConfig {
     .SYNOPSIS
         Display current wow.json settings.
     #>
-    $scriptPath = Join-Path $WowScriptRoot "Get-WowConfig.ps1"
+    $scriptPath = Join-Path $script:WowScriptRoot "Get-WowConfig.ps1"
     & $scriptPath @args
 }
 
@@ -82,7 +82,7 @@ function Get-WowInstallations {
     .SYNOPSIS
         List detected WoW installations.
     #>
-    $scriptPath = Join-Path $WowScriptRoot "Get-WowInstallations.ps1"
+    $scriptPath = Join-Path $script:WowScriptRoot "Get-WowInstallations.ps1"
     & $scriptPath @args
 }
 
@@ -93,7 +93,7 @@ function Get-InstalledAddons {
     .PARAMETER Installation
         WoW installation to scan (retail, classic, classicCata, beta, ptr)
     #>
-    $scriptPath = Join-Path $WowScriptRoot "Get-InstalledAddons.ps1"
+    $scriptPath = Join-Path $script:WowScriptRoot "Get-InstalledAddons.ps1"
     & $scriptPath @args
 }
 
@@ -104,7 +104,7 @@ function Update-AddonsJson {
     .PARAMETER Installation
         WoW installation to update (retail, classic, classicCata, beta, ptr)
     #>
-    $scriptPath = Join-Path $WowScriptRoot "Update-AddonsJson.ps1"
+    $scriptPath = Join-Path $script:WowScriptRoot "Update-AddonsJson.ps1"
     & $scriptPath @args
 }
 
