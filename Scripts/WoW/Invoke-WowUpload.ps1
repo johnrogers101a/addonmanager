@@ -205,39 +205,29 @@ if ($LASTEXITCODE -eq 0) {
 }
 Write-Host ""
 
-# Get repository root (parent of Scripts folder)
-$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-$wtfRoot = Join-Path $repoRoot "WTF"
+# Load WoW configuration
+$configScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/Get-WowConfig.ps1"
+$config = & $configScript
 
-if (-not (Test-Path $wtfRoot)) {
-    Write-Host "Error: WTF folder not found at: $wtfRoot" -ForegroundColor Red
-    Write-Host "Please ensure WTF configurations exist in the repository." -ForegroundColor Red
+if (-not $config -or -not $config.installations) {
+    Write-Host "Error: No WoW installations configured" -ForegroundColor Red
+    Write-Host "Please run New-WowConfig to set up your configuration." -ForegroundColor Red
     exit 1
 }
 
-# Scan for WTF configurations
-$wtfFolders = Get-ChildItem -Path $wtfRoot -Directory -ErrorAction SilentlyContinue
-
-if (-not $wtfFolders) {
-    Write-Host "Error: No WTF configurations found in: $wtfRoot" -ForegroundColor Red
-    exit 1
-}
-
-Write-Host "Found $($wtfFolders.Count) configuration(s) to upload:" -ForegroundColor Cyan
-foreach ($folder in $wtfFolders) {
-    Write-Host "  - $($folder.Name)" -ForegroundColor White
-}
+Write-Host "Found $($config.installations.Count) WoW installation(s) to upload" -ForegroundColor Cyan
 Write-Host ""
 
-# Upload each configuration
+# Upload each installation
 $totalFiles = 0
 
-foreach ($folder in $wtfFolders) {
-    $installKey = $folder.Name
-    $wtfPath = Join-Path $folder.FullName "WTF"
+foreach ($installation in $config.installations) {
+    $installKey = $installation.key
+    $installPath = $installation.path
+    $wtfPath = Join-Path $installPath "WTF"
     
     if (-not (Test-Path $wtfPath)) {
-        Write-Host "  ⚠ WTF folder not found in $installKey, skipping" -ForegroundColor Yellow
+        Write-Host "  ⚠ WTF folder not found in $installKey at $wtfPath, skipping" -ForegroundColor Yellow
         continue
     }
     
