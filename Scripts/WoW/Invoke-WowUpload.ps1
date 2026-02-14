@@ -29,9 +29,7 @@
 #>
 
 [CmdletBinding()]
-param(
-    [switch]$Verbose
-)
+param()
 
 $ErrorActionPreference = 'Stop'
 
@@ -44,25 +42,19 @@ Write-Host ""
 # Show paths being used (verbose only)
 $profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
 
-if ($Verbose) {
-    Write-Host "Validating paths..." -ForegroundColor Cyan
-    Write-Host "  Profile directory: $profileDir" -ForegroundColor Gray
-}
+Write-Verbose "Validating paths..."
+Write-Verbose "  Profile directory: $profileDir"
 
 if (-not (Test-Path $profileDir)) {
     Write-Host "Error: Profile directory not found: $profileDir" -ForegroundColor Red
     exit 1
 }
 
-if ($Verbose) {
-    Write-Host "  ✓ Profile directory exists" -ForegroundColor Green
-}
+Write-Verbose "  ✓ Profile directory exists"
 
 $scriptsDir = Join-Path $profileDir "Scripts/WoW"
 
-if ($Verbose) {
-    Write-Host "  Scripts directory: $scriptsDir" -ForegroundColor Gray
-}
+Write-Verbose "  Scripts directory: $scriptsDir"
 
 if (-not (Test-Path $scriptsDir)) {
     Write-Host "Error: Scripts directory not found: $scriptsDir" -ForegroundColor Red
@@ -70,10 +62,7 @@ if (-not (Test-Path $scriptsDir)) {
     exit 1
 }
 
-if ($Verbose) {
-    Write-Host "  ✓ Scripts directory exists" -ForegroundColor Green
-    Write-Host ""
-}
+Write-Verbose "  ✓ Scripts directory exists"
 
 # Azure configuration
 $subscription = "4js"
@@ -282,10 +271,8 @@ if (-not $config.installations) {
     exit 1
 }
 
-if ($Verbose) {
-    Write-Host "Validating WoW installation..." -ForegroundColor Cyan
-    Write-Host "  WoW root: $($config.wowRoot)" -ForegroundColor Gray
-}
+Write-Verbose "Validating WoW installation..."
+Write-Verbose "  WoW root: $($config.wowRoot)"
 
 if (-not $config.wowRoot) {
     Write-Host "Error: WoW root not configured in wow.json" -ForegroundColor Red
@@ -298,43 +285,38 @@ if (-not (Test-Path $config.wowRoot)) {
     exit 1
 }
 
-if ($Verbose) {
-    Write-Host "  ✓ WoW root exists" -ForegroundColor Green
-}
+Write-Verbose "  ✓ WoW root exists"
 
 $installCount = ($config.installations.PSObject.Properties | Measure-Object).Count
 
-if ($Verbose) {
-    Write-Host ""
-    Write-Host "Checking $installCount installation(s)..." -ForegroundColor Cyan
+Write-Verbose ""
+Write-Verbose "Checking $installCount installation(s)..."
+
+# Validate each installation and show paths
+foreach ($installProp in $config.installations.PSObject.Properties) {
+    $installKey = $installProp.Name
+    $installInfo = $installProp.Value
+    $installPath = Join-Path $config.wowRoot $installInfo.path
+    $wtfPath = Join-Path $installPath "WTF"
     
-    # Validate each installation and show paths
-    foreach ($installProp in $config.installations.PSObject.Properties) {
-        $installKey = $installProp.Name
-        $installInfo = $installProp.Value
-        $installPath = Join-Path $config.wowRoot $installInfo.path
-        $wtfPath = Join-Path $installPath "WTF"
-        
-        Write-Host "  [$installKey]" -ForegroundColor White
-        Write-Host "    Path: $installPath" -ForegroundColor Gray
-        
-        if (-not (Test-Path $installPath)) {
-            Write-Host "    ✗ Installation directory not found!" -ForegroundColor Red
-            continue
-        }
-        Write-Host "    ✓ Installation exists" -ForegroundColor Green
-        
-        Write-Host "    WTF: $wtfPath" -ForegroundColor Gray
-        if (-not (Test-Path $wtfPath)) {
-            Write-Host "    ✗ WTF directory not found!" -ForegroundColor Red
-            continue
-        }
-        
-        $fileCount = (Get-ChildItem -Path $wtfPath -File -Recurse -ErrorAction SilentlyContinue | 
-            Where-Object { $_.Name -ne 'Config.wtf' } | Measure-Object).Count
-        Write-Host "    ✓ WTF exists with $fileCount files" -ForegroundColor Green
+    Write-Verbose "  [$installKey]"
+    Write-Verbose "    Path: $installPath"
+    
+    if (-not (Test-Path $installPath)) {
+        Write-Verbose "    ✗ Installation directory not found!"
+        continue
     }
-    Write-Host ""
+    Write-Verbose "    ✓ Installation exists"
+    
+    Write-Verbose "    WTF: $wtfPath"
+    if (-not (Test-Path $wtfPath)) {
+        Write-Verbose "    ✗ WTF directory not found!"
+        continue
+    }
+    
+    $fileCount = (Get-ChildItem -Path $wtfPath -File -Recurse -ErrorAction SilentlyContinue | 
+        Where-Object { $_.Name -ne 'Config.wtf' } | Measure-Object).Count
+    Write-Verbose "    ✓ WTF exists with $fileCount files"
 }
 
 Write-Host "Found $installCount WoW installation(s) to upload" -ForegroundColor Cyan

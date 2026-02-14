@@ -45,12 +45,16 @@ function Invoke-WowDownload {
     .PARAMETER WhatIf
         Preview changes without applying
     #>
+    [CmdletBinding()]
+    param()
+    
     $scriptPath = Join-Path $script:WowScriptRoot "Invoke-WowDownload.ps1"
     if (-not (Test-Path $scriptPath)) {
         Write-Host "Error: Script not found: $scriptPath" -ForegroundColor Red
         return
     }
-    & $scriptPath @args
+    # Don't pass @args - preference variables like $VerbosePreference automatically propagate
+    & $scriptPath
 }
 
 function Invoke-WowUpload {
@@ -61,12 +65,16 @@ function Invoke-WowUpload {
         Uploads all WTF configurations from repository to Azure.
         Creates Azure resources if they don't exist (idempotent).
     #>
+    [CmdletBinding()]
+    param()
+    
     $scriptPath = Join-Path $script:WowScriptRoot "Invoke-WowUpload.ps1"
     if (-not (Test-Path $scriptPath)) {
         Write-Host "Error: Script not found: $scriptPath" -ForegroundColor Red
         return
     }
-    & $scriptPath @args
+    # Don't pass @args - preference variables like $VerbosePreference automatically propagate
+    & $scriptPath
 }
 
 # Aliases for convenience
