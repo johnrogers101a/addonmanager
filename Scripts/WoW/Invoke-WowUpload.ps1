@@ -345,35 +345,66 @@ foreach ($installProp in $config.installations.PSObject.Properties) {
     
     Write-Host "Uploading: $installKey" -ForegroundColor Cyan
     
-    # Count files (excluding Config.wtf)
-    $files = Get-ChildItem -Path $wtfPath -File -Recurse -ErrorAction SilentlyContinue | 
-        Where-Object { $_.Name -ne 'Config.wtf' }
+    # Create temp directory for upload (excluding Config.wtf)
+    $tempUploadDir = Join-Path $env:TEMP "wow-upload-$(Get-Random)"
+    New-Item -ItemType Directory -Path $tempUploadDir -Force | Out-Null
     
-    if (-not $files) {
-        Write-Host "  ℹ No files to upload" -ForegroundColor Gray
-        continue
+    try {
+        # Copy WTF contents to temp, excluding Config.wtf
+        Write-Verbose "  Copying files to temp directory (excluding Config.wtf)..."
+        Get-ChildItem -Path $wtfPath -Recurse | ForEach-Object {
+            if ($_.Name -eq 'Config.wtf') {
+                Write-Verbose "    Skipping: $($_.FullName)"
+                return
+            }
+            
+            $relativePath = $_.FullName.Substring($wtfPath.Length + 1)
+            $destPath = Join-Path $tempUploadDir $relativePath
+            
+            if ($_.PSIsContainer) {
+                New-Item -ItemType Directory -Path $destPath -Force | Out-Null
+            } else {
+                $destDir = Split-Path -Parent $destPath
+                if (-not (Test-Path $destDir)) {
+                    New-Item -ItemType Directory -Path $destDir -Force | Out-Null
+                }
+                Copy-Item -Path $_.FullName -Destination $destPath -Force
+            }
+        }
+        
+        # Count files to upload
+        $fileCount = (Get-ChildItem -Path $tempUploadDir -File -Recurse | Measure-Object).Count
+        
+        if ($fileCount -eq 0) {
+            Write-Host "  ℹ No files to upload" -ForegroundColor Gray
+            continue
+        }
+        
+        Write-Host "  Uploading $fileCount files..." -ForegroundColor Gray
+        
+        # Upload to Azure
+        $blobPrefix = "$installKey/WTF"
+        
+        az storage blob upload-batch `
+            --account-name $storageAccount `
+            --account-key $storageKey `
+            --destination $container `
+            --source $tempUploadDir `
+            --destination-path $blobPrefix `
+            --output none
+        
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  ✓ Uploaded $fileCount files" -ForegroundColor Green
+            $totalFiles += $fileCount
+        } else {
+            Write-Host "  ✗ Upload failed" -ForegroundColor Red
+        }
     }
-    
-    Write-Host "  Uploading $($files.Count) files..." -ForegroundColor Gray
-    
-    # Upload to Azure
-    $blobPrefix = "$installKey/WTF"
-    
-    az storage blob upload-batch `
-        --account-name $storageAccount `
-        --account-key $storageKey `
-        --destination $container `
-        --source $wtfPath `
-        --destination-path $blobPrefix `
-        --pattern "*" `
-        --exclude-pattern "Config.wtf" `
-        --output none
-    
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "  ✓ Uploaded $($files.Count) files" -ForegroundColor Green
-        $totalFiles += $files.Count
-    } else {
-        Write-Host "  ✗ Upload failed" -ForegroundColor Red
+    finally {
+        # Clean up temp directory
+        if (Test-Path $tempUploadDir) {
+            Remove-Item -Path $tempUploadDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
     }
     
     Write-Host ""
