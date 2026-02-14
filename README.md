@@ -14,45 +14,41 @@ Synchronize World of Warcraft addon configurations across multiple machines usin
 
 ## Quick Start
 
-### 1. Clone Repository
+### 1. Install WoW Management Commands
 
-```bash
+Run Setup.ps1 from the repository:
+
+```powershell
+# Clone repository first (if you haven't)
 git clone <repo-url>
 cd addonmanager
 git checkout feature/rebirth
+
+# Run setup
+./Setup.ps1
 ```
 
-### 2. Load WoW Management Functions
-
-Add to your PowerShell profile:
+Or install directly from URL (if hosted in Azure):
 
 ```powershell
-# Initialize WoW management
-$wowInitScript = "C:\Path\To\addonmanager\Scripts\WoW\Initialize-WowProfile.ps1"
-if (Test-Path $wowInitScript) {
-    . $wowInitScript
-}
+iex (irm https://stprofilewus3.blob.core.windows.net/wow-config/Setup.ps1)
 ```
 
-### 3. Create Configuration
+### 2. Restart PowerShell
 
 ```powershell
-New-WowConfig
+# Or reload profile without restarting
+. $PROFILE
 ```
 
-This creates `wow.json` in your PowerShell profile directory with auto-detected WoW installations.
-
-### 4. Sync Configuration
+### 3. Use WoW Commands
 
 ```powershell
-# Sync all installations
+# Download WTF configuration from Azure
 Wow-Download
 
-# Or use full command name
-Invoke-WowDownload
-
-# Sync specific installation
-Wow-Download -Installation retail
+# Upload your WTF configuration to Azure
+Wow-Upload
 ```
 
 ## Commands
