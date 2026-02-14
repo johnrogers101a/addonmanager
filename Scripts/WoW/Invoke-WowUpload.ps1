@@ -352,28 +352,28 @@ foreach ($installProp in $config.installations.PSObject.Properties) {
     try {
         # Copy WTF contents to temp, excluding Config.wtf
         Write-Verbose "  Copying files to temp directory (excluding Config.wtf)..."
-        Get-ChildItem -Path $wtfPath -Recurse | ForEach-Object {
-            if ($_.Name -eq 'Config.wtf') {
-                Write-Verbose "    Skipping: $($_.FullName)"
-                return
+        
+        # Use robocopy or manual copy
+        $filesToCopy = Get-ChildItem -Path $wtfPath -File -Recurse -ErrorAction SilentlyContinue | 
+            Where-Object { $_.Name -ne 'Config.wtf' }
+        
+        foreach ($file in $filesToCopy) {
+            # Calculate relative path from WTF root
+            $relativePath = $file.FullName.Replace($wtfPath, '').TrimStart('\', '/')
+            $destFile = Join-Path $tempUploadDir $relativePath
+            $destDir = Split-Path -Parent $destFile
+            
+            # Create destination directory if needed
+            if (-not (Test-Path $destDir)) {
+                New-Item -ItemType Directory -Path $destDir -Force | Out-Null
             }
             
-            $relativePath = $_.FullName.Substring($wtfPath.Length + 1)
-            $destPath = Join-Path $tempUploadDir $relativePath
-            
-            if ($_.PSIsContainer) {
-                New-Item -ItemType Directory -Path $destPath -Force | Out-Null
-            } else {
-                $destDir = Split-Path -Parent $destPath
-                if (-not (Test-Path $destDir)) {
-                    New-Item -ItemType Directory -Path $destDir -Force | Out-Null
-                }
-                Copy-Item -Path $_.FullName -Destination $destPath -Force
-            }
+            # Copy file
+            Copy-Item -Path $file.FullName -Destination $destFile -Force
         }
         
         # Count files to upload
-        $fileCount = (Get-ChildItem -Path $tempUploadDir -File -Recurse | Measure-Object).Count
+        $fileCount = (Get-ChildItem -Path $tempUploadDir -File -Recurse -ErrorAction SilentlyContinue | Measure-Object).Count
         
         if ($fileCount -eq 0) {
             Write-Host "  ℹ No files to upload" -ForegroundColor Gray
