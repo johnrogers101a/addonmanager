@@ -1,0 +1,32 @@
+{
+  "wowRoot": "C:\\Program Files (x86)\\World of Warcraft",
+  "installations": {
+    "retail": {
+      "path": "_retail_",
+      "description": "World of Warcraft Retail"
+    },
+    "classic": {
+      "path": "_classic_era_",
+      "description": "World of Warcraft Classic Era"
+    },
+    "classicCata": {
+      "path": "_classic_",
+      "description": "World of Warcraft Classic Cataclysm"
+    },
+    "beta": {
+      "path": "_beta_",
+      "description": "World of Warcraft Beta"
+    },
+    "ptr": {
+      "path": "_ptr_",
+      "description": "World of Warcraft PTR"
+    }
+  },
+  "azureSubscription": "4js",
+  "azureResourceGroup": "rg-wow-profile",
+  "azureStorageAccount": "stwowprofilewus3",
+  "azureContainer": "wow-config",
+  "excludeFiles": [
+    "Config.wtf"
+  ]
+}

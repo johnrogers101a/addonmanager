@@ -1,0 +1,23 @@
+# WTF configurations (uploaded to Azure)
+WTF/*/
+
+# Keep directory structure
+!WTF/.gitkeep
+
+# Local testing
+*.local.ps1
+test-*.ps1
+
+# PowerShell
+*.ps1~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
