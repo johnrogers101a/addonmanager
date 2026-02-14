@@ -134,6 +134,9 @@ $wowDownloadWrapper = @'
 <#
 .SYNOPSIS
     Sync WTF configuration from Azure
+
+.DESCRIPTION
+    Downloads and syncs WTF configuration from Azure Blob Storage.
 #>
 param()
 $wowScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/Invoke-WowDownload.ps1"
@@ -150,6 +153,9 @@ $wowUploadWrapper = @'
 <#
 .SYNOPSIS
     Upload WTF configuration to Azure
+
+.DESCRIPTION
+    Uploads WTF configuration to Azure Blob Storage.
 #>
 param()
 $wowScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/Invoke-WowUpload.ps1"

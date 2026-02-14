@@ -108,7 +108,10 @@ function Update-AddonsJson {
     & $scriptPath @args
 }
 
-# Silent initialization - no output
-# Commands will be shown by existing Show-Commands function
+# Silent initialization - integrated with Show-Commands
+# Call Show-Commands again to include WoW commands
+if (Get-Command Show-Commands -ErrorAction SilentlyContinue) {
+    Show-Commands
+}
 
 
