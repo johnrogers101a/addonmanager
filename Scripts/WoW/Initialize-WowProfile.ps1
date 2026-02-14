@@ -108,10 +108,11 @@ function Update-AddonsJson {
     & $scriptPath @args
 }
 
-# Silent initialization - integrated with Show-Commands
-# Call Show-Commands again to include WoW commands
-if (Get-Command Show-Commands -ErrorAction SilentlyContinue) {
-    Show-Commands
-}
+# Append WoW commands to the display (Initialize-PowerShellProfile already started the output)
+Write-Host "  Wow-Download              " -NoNewline -ForegroundColor Green
+Write-Host "- Sync WTF configuration from Azure" -ForegroundColor Gray
+Write-Host "  Wow-Upload                " -NoNewline -ForegroundColor Green
+Write-Host "- Upload WTF configuration to Azure" -ForegroundColor Gray
+Write-Host ""
 
 
