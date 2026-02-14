@@ -206,7 +206,14 @@ if ($LASTEXITCODE -eq 0) {
 Write-Host ""
 
 # Load WoW configuration
-$configScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/Get-WowConfig.ps1"
+$profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
+$configScript = Join-Path $profileDir "Scripts/WoW/Get-WowConfig.ps1"
+
+if (-not (Test-Path $configScript)) {
+    Write-Host "Error: Get-WowConfig.ps1 not found at: $configScript" -ForegroundColor Red
+    exit 1
+}
+
 $config = & $configScript
 
 if (-not $config) {
@@ -214,7 +221,13 @@ if (-not $config) {
     Write-Host "No WoW configuration found. Let's create one now..." -ForegroundColor Cyan
     Write-Host ""
     
-    $newConfigScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/New-WowConfig.ps1"
+    $newConfigScript = Join-Path $profileDir "Scripts/WoW/New-WowConfig.ps1"
+    
+    if (-not (Test-Path $newConfigScript)) {
+        Write-Host "Error: New-WowConfig.ps1 not found at: $newConfigScript" -ForegroundColor Red
+        exit 1
+    }
+    
     & $newConfigScript
     
     # Try loading again
@@ -226,25 +239,41 @@ if (-not $config) {
     }
 }
 
-if (-not $config.installations -or $config.installations.Count -eq 0) {
+# Validate configuration
+if (-not $config.installations) {
     Write-Host "Error: No WoW installations configured" -ForegroundColor Red
     Write-Host "Please run New-WowConfig to set up your configuration." -ForegroundColor Red
     exit 1
 }
 
-Write-Host "Found $($config.installations.Count) WoW installation(s) to upload" -ForegroundColor Cyan
+if (-not $config.wowRoot -or -not (Test-Path $config.wowRoot)) {
+    Write-Host "Error: WoW root directory not found: $($config.wowRoot)" -ForegroundColor Red
+    Write-Host "Please run New-WowConfig to update your configuration." -ForegroundColor Red
+    exit 1
+}
+
+$installCount = ($config.installations.PSObject.Properties | Measure-Object).Count
+Write-Host "Found $installCount WoW installation(s) to upload" -ForegroundColor Cyan
 Write-Host ""
 
 # Upload each installation
 $totalFiles = 0
 
-foreach ($installation in $config.installations) {
-    $installKey = $installation.key
-    $installPath = $installation.path
+foreach ($installProp in $config.installations.PSObject.Properties) {
+    $installKey = $installProp.Name
+    $installInfo = $installProp.Value
+    $installPath = Join-Path $config.wowRoot $installInfo.path
     $wtfPath = Join-Path $installPath "WTF"
     
+    # Validate installation path exists
+    if (-not (Test-Path $installPath)) {
+        Write-Host "  ⚠ Installation path not found: $installPath, skipping $installKey" -ForegroundColor Yellow
+        continue
+    }
+    
+    # Validate WTF folder exists
     if (-not (Test-Path $wtfPath)) {
-        Write-Host "  ⚠ WTF folder not found in $installKey at $wtfPath, skipping" -ForegroundColor Yellow
+        Write-Host "  ⚠ WTF folder not found: $wtfPath, skipping $installKey" -ForegroundColor Yellow
         continue
     }
     

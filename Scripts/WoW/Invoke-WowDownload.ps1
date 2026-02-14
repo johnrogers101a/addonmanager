@@ -55,7 +55,14 @@ Write-Host ""
 
 # Load configuration (create if missing)
 Write-Host "Loading configuration..." -ForegroundColor Cyan
-$configScript = Join-Path $PSScriptRoot "Get-WowConfig.ps1"
+
+$profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
+$configScript = Join-Path $profileDir "Scripts/WoW/Get-WowConfig.ps1"
+
+if (-not (Test-Path $configScript)) {
+    Write-Host "Error: Get-WowConfig.ps1 not found at: $configScript" -ForegroundColor Red
+    return
+}
 
 try {
     $config = & $configScript
@@ -66,7 +73,13 @@ catch {
     Write-Host "  ℹ wow.json not found, creating..." -ForegroundColor Yellow
     Write-Host ""
     
-    $newConfigScript = Join-Path $PSScriptRoot "New-WowConfig.ps1"
+    $newConfigScript = Join-Path $profileDir "Scripts/WoW/New-WowConfig.ps1"
+    
+    if (-not (Test-Path $newConfigScript)) {
+        Write-Host "Error: New-WowConfig.ps1 not found at: $newConfigScript" -ForegroundColor Red
+        return
+    }
+    
     & $newConfigScript
     
     if ($LASTEXITCODE -ne 0) {
