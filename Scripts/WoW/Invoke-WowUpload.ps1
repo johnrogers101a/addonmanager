@@ -326,6 +326,25 @@ foreach ($installProp in $config.installations.PSObject.Properties) {
     
     Write-Host "Uploading: $installKey" -ForegroundColor Cyan
     
+    # Generate addons.json before upload
+    $updateAddonsScript = Join-Path $scriptsDir "Update-AddonsJson.ps1"
+    Write-Verbose "  Update-AddonsJson script: $updateAddonsScript"
+    
+    if (Test-Path $updateAddonsScript) {
+        Write-Verbose "  ✓ exists"
+        Write-Host "  Generating addons.json..." -ForegroundColor Gray
+        try {
+            $addonCount = & $updateAddonsScript -WowRoot $wowRoot -Installation $installInfo.path -InstallationKey $installKey
+            Write-Host "  ✓ addons.json created with $addonCount addons" -ForegroundColor Green
+        }
+        catch {
+            Write-Host "  ⚠ Failed to generate addons.json: $($_.Exception.Message)" -ForegroundColor Yellow
+            Write-Host "  Continuing with upload..." -ForegroundColor Gray
+        }
+    } else {
+        Write-Host "  ⚠ Update-AddonsJson.ps1 not found at: $updateAddonsScript" -ForegroundColor Yellow
+    }
+    
     # Create temp directory for upload (excluding Config.wtf)
     $tempUploadDir = Join-Path $tempBase "wow-upload-$(Get-Random)"
     Write-Verbose "  tempUploadDir: $tempUploadDir"

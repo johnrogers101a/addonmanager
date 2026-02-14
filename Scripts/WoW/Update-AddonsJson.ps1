@@ -40,8 +40,20 @@ $ErrorActionPreference = 'Stop'
 
 Write-Verbose "Generating addon inventory for $InstallationKey..."
 
-# Get installed addons
-$getAddonsScript = Join-Path $PSScriptRoot "Get-InstalledAddons.ps1"
+# Resolve scripts directory from profile
+$profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
+$scriptsDir = Join-Path $profileDir "Scripts/WoW"
+Write-Verbose "  Scripts directory: $scriptsDir"
+
+$getAddonsScript = Join-Path $scriptsDir "Get-InstalledAddons.ps1"
+Write-Verbose "  Get-InstalledAddons script: $getAddonsScript"
+
+if (-not (Test-Path $getAddonsScript)) {
+    Write-Host "Error: Get-InstalledAddons.ps1 not found at: $getAddonsScript" -ForegroundColor Red
+    return 0
+}
+Write-Verbose "  ✓ exists"
+
 $addons = & $getAddonsScript -WowRoot $WowRoot -Installation $Installation
 
 # Build addons.json content
@@ -53,10 +65,19 @@ $addonsJson = @{
 
 # Save to WTF folder
 $wtfPath = Join-Path $WowRoot $Installation "WTF"
+Write-Verbose "  WTF path for addons.json: $wtfPath"
+
+if (-not (Test-Path $wtfPath)) {
+    Write-Host "Error: WTF folder not found: $wtfPath" -ForegroundColor Red
+    return 0
+}
+Write-Verbose "  ✓ exists"
+
 $jsonPath = Join-Path $wtfPath "addons.json"
+Write-Verbose "  addons.json path: $jsonPath"
 
 $addonsJson | ConvertTo-Json -Depth 10 | Set-Content -Path $jsonPath -Encoding UTF8
 
-Write-Verbose "Created addons.json with $($addons.Count) addons at: $jsonPath"
+Write-Verbose "  ✓ Created addons.json with $($addons.Count) addons at: $jsonPath"
 
 return $addons.Count

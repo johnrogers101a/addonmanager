@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "description": "Mapping of WoW addons to their GitHub repositories for update tracking and automated downloads",
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-14T22:08:00Z",
+  "addons": {
+    "!BugGrabber": {
+      "github": {
+        "owner": "funkydude",
+        "repo": "BugSack",
+        "branch": "master"
+      },
+      "metadata": {
+        "author": "Funkeh",
+        "description": "Grabs bugs for the bug sack",
+        "curseforgeId": null
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "v12.0.1",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": ["*-nolib.zip"],
+        "installPath": "!BugGrabber"
+      }
+    },
+    "AbilityTimeline": {
+      "github": {
+        "owner": "Jods-GH",
+        "repo": "AbilityTimeline",
+        "branch": "main"
+      },
+      "metadata": {
+        "author": "Jods",
+        "description": "Adds various improvements to blizzards encounter ability timeline",
+        "curseforgeId": null
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "v0.18",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": [],
+        "installPath": "AbilityTimeline"
+      }
+    },
+    "BetterBlizzFrames": {
+      "github": {
+        "owner": "Bodify",
+        "repo": "BetterBlizzFrames",
+        "branch": "main"
+      },
+      "metadata": {
+        "author": "Bodify",
+        "description": "Standard Blizzard unit frames with more features and easy settings",
+        "curseforgeId": null
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "v1.9.0",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": [],
+        "installPath": "BetterBlizzFrames"
+      }
+    },
+    "BtWQuests": {
+      "github": {
+        "owner": null,
+        "repo": null,
+        "branch": null
+      },
+      "metadata": {
+        "author": "Breen",
+        "description": "Quest progression tracker with categorized quest chains - core addon",
+        "curseforgeId": "btw-quests",
+        "note": "Core addon distributed via CurseForge only, no standalone GitHub repo. Expansion modules are on GitHub."
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": false,
+        "lastChecked": null,
+        "installedVersion": "2.60.0",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": [],
+        "installPath": "BtWQuests"
+      }
+    },
+    "BtWQuestsDragonflight": {
+      "github": {
+        "owner": "Breeni",
+        "repo": "BtWQuestsDragonflight",
+        "branch": "mainline"
+      },
+      "metadata": {
+        "author": "Breen",
+        "description": "Dragonflight quest data for BtWQuests",
+        "curseforgeId": null
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "v12.11",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": [],
+        "installPath": "BtWQuestsDragonflight"
+      }
+    },
+    "BtWQuestsMidnightPrologue": {
+      "github": {
+        "owner": "Breeni",
+        "repo": "BtWQuestsMidnightPrologue",
+        "branch": "mainline"
+      },
+      "metadata": {
+        "author": "Breen",
+        "description": "Midnight Prologue quest data for BtWQuests",
+        "curseforgeId": null
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "1.0",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": [],
+        "installPath": "BtWQuestsMidnightPrologue"
+      }
+    },
+    "BtWQuestsTheWarWithin": {
+      "github": {
+        "owner": "Breeni",
+        "repo": "BtWQuestsTheWarWithin",
+        "branch": "mainline"
+      },
+      "metadata": {
+        "author": "Breen",
+        "description": "The War Within quest data for BtWQuests",
+        "curseforgeId": null
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "11.0",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": [],
+        "installPath": "BtWQuestsTheWarWithin"
+      }
+    },
+    "BugSack": {
+      "github": {
+        "owner": "funkydude",
+        "repo": "BugSack",
+        "branch": "master"
+      },
+      "metadata": {
+        "author": "Funkeh",
+        "description": "A simple display for collected errors in World of Warcraft",
+        "curseforgeId": null
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "v11.2.9",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": ["*-nolib.zip"],
+        "installPath": "BugSack"
+      }
+    },
+    "TeleportMenu": {
+      "github": {
+        "owner": "Justw8",
+        "repo": "TeleportMenu",
+        "branch": "main"
+      },
+      "metadata": {
+        "author": "Justwait",
+        "description": "Hearthstone and teleport buttons attached to the game menu",
+        "curseforgeId": null
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "v12",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": [],
+        "installPath": "TeleportMenu"
+      }
+    },
+    "WaypointUI": {
+      "github": {
+        "owner": "Adaptvx",
+        "repo": "Waypoint-UI",
+        "branch": "main"
+      },
+      "metadata": {
+        "author": "AdaptiveX",
+        "description": "An in-world waypoint and pinpoint to show relevant information directly in world-space",
+        "curseforgeId": null
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "1.3.2",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": [],
+        "installPath": "WaypointUI"
+      }
+    },
+    "ZamestoTV_PrePath": {
+      "github": {
+        "owner": "Hubbotu",
+        "repo": "Midnight-Twilight-Ascension-Pre-Patch",
+        "branch": "main"
+      },
+      "metadata": {
+        "author": "ZamestoTV",
+        "description": "Midnight Twilight Ascension Pre-Patch Event",
+        "curseforgeId": null,
+        "note": "Mirrored by Hubbotu - original author has no GitHub presence"
+      },
+      "updateTracking": {
+        "enabled": true,
+        "checkReleases": true,
+        "lastChecked": null,
+        "installedVersion": "1.9.8",
+        "latestVersion": null
+      },
+      "download": {
+        "assetPattern": "*.zip",
+        "excludePatterns": [],
+        "installPath": "ZamestoTV_PrePath"
+      }
+    }
+  },
+  "settings": {
+    "updateCheckInterval": 86400,
+    "autoUpdate": false,
+    "notifyOnUpdate": true,
+    "backupBeforeUpdate": true
+  },
+  "notes": [
+    "This file maps WoW addon folder names to their GitHub repositories",
+    "Used for automated update checking and downloading",
+    "installedVersion is synced from WTF/addons.json",
+    "latestVersion is fetched from GitHub releases API",
+    "Phase 2 features:",
+    "  - Check-WowAddonUpdates: Compare installed vs latest versions",
+    "  - Update-WowAddon: Download and install updates",
+    "  - Watch-WowAddonUpdates: Real-time notification system",
+    "GitHub MCP tools needed:",
+    "  - github-mcp-server-actions_list (list releases)",
+    "  - github-mcp-server-actions_get (get release details)",
+    "  - Download release assets via direct URLs",
+    "Asset patterns:",
+    "  - Most addons release as .zip files",
+    "  - Some have -nolib variants (exclude if using packaged libs)",
+    "  - Extract to WoW/_retail_/Interface/AddOns/<installPath>"
+  ]
+}

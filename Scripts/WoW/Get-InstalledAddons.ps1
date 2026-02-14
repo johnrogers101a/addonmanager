@@ -33,11 +33,13 @@ param(
 $ErrorActionPreference = 'Continue'
 
 $addonsPath = Join-Path $WowRoot $Installation "Interface" "AddOns"
+Write-Verbose "  AddOns path: $addonsPath"
 
 if (-not (Test-Path $addonsPath)) {
     Write-Warning "AddOns folder not found: $addonsPath"
     return @()
 }
+Write-Verbose "  ✓ AddOns path exists"
 
 $addonFolders = Get-ChildItem -Path $addonsPath -Directory -ErrorAction SilentlyContinue
 
@@ -46,8 +48,21 @@ if (-not $addonFolders) {
     return @()
 }
 
+Write-Verbose "  Found $($addonFolders.Count) addon folders"
+
 $addons = @()
-$tocScript = Join-Path $PSScriptRoot "Get-TocMetadata.ps1"
+
+# Resolve scripts directory from profile
+$profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
+$scriptsDir = Join-Path $profileDir "Scripts/WoW"
+$tocScript = Join-Path $scriptsDir "Get-TocMetadata.ps1"
+Write-Verbose "  TOC script: $tocScript"
+
+if (-not (Test-Path $tocScript)) {
+    Write-Host "Error: Get-TocMetadata.ps1 not found at: $tocScript" -ForegroundColor Red
+    return @()
+}
+Write-Verbose "  ✓ TOC script exists"
 
 foreach ($folder in $addonFolders) {
     # Look for .toc file matching folder name
