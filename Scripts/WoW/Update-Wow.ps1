@@ -49,12 +49,32 @@ Write-Host "WoW Configuration Sync" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Load configuration
+# Load configuration (create if missing)
 Write-Host "Loading configuration..." -ForegroundColor Cyan
 $configScript = Join-Path $PSScriptRoot "Get-WowConfig.ps1"
-$config = & $configScript
 
-Write-Host "  ✓ wow.json loaded" -ForegroundColor Green
+try {
+    $config = & $configScript
+    Write-Host "  ✓ wow.json loaded" -ForegroundColor Green
+}
+catch {
+    # wow.json doesn't exist, create it
+    Write-Host "  ℹ wow.json not found, creating..." -ForegroundColor Yellow
+    Write-Host ""
+    
+    $newConfigScript = Join-Path $PSScriptRoot "New-WowConfig.ps1"
+    & $newConfigScript
+    
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Configuration creation failed" -ForegroundColor Red
+        return
+    }
+    
+    # Load the newly created config
+    $config = & $configScript
+    Write-Host ""
+}
+
 Write-Host "  ✓ WoW installation found: $($config.wowRoot)" -ForegroundColor Green
 Write-Host ""
 
