@@ -24,7 +24,16 @@ param()
 $ErrorActionPreference = 'Stop'
 
 # Get script directory for function calls
-$script:WowScriptRoot = $PSScriptRoot
+# When dot-sourced, $PSScriptRoot is unreliable, so compute from profile directory
+$profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
+$script:WowScriptRoot = Join-Path $profileDir "Scripts/WoW"
+
+# Validate script directory exists
+if (-not (Test-Path $script:WowScriptRoot)) {
+    Write-Host "Error: WoW scripts directory not found: $script:WowScriptRoot" -ForegroundColor Red
+    Write-Host "Please run Setup.ps1 from the addonmanager repository." -ForegroundColor Yellow
+    return
+}
 
 # Primary WoW Management Functions
 function Invoke-WowDownload {
@@ -37,6 +46,10 @@ function Invoke-WowDownload {
         Preview changes without applying
     #>
     $scriptPath = Join-Path $script:WowScriptRoot "Invoke-WowDownload.ps1"
+    if (-not (Test-Path $scriptPath)) {
+        Write-Host "Error: Script not found: $scriptPath" -ForegroundColor Red
+        return
+    }
     & $scriptPath @args
 }
 
@@ -49,6 +62,10 @@ function Invoke-WowUpload {
         Creates Azure resources if they don't exist (idempotent).
     #>
     $scriptPath = Join-Path $script:WowScriptRoot "Invoke-WowUpload.ps1"
+    if (-not (Test-Path $scriptPath)) {
+        Write-Host "Error: Script not found: $scriptPath" -ForegroundColor Red
+        return
+    }
     & $scriptPath @args
 }
 
@@ -65,6 +82,10 @@ function New-WowConfig {
         Interactive wizard that detects WoW installations and creates wow.json.
     #>
     $scriptPath = Join-Path $script:WowScriptRoot "New-WowConfig.ps1"
+    if (-not (Test-Path $scriptPath)) {
+        Write-Host "Error: Script not found: $scriptPath" -ForegroundColor Red
+        return
+    }
     & $scriptPath @args
 }
 
@@ -74,6 +95,10 @@ function Get-WowConfig {
         Display current wow.json settings.
     #>
     $scriptPath = Join-Path $script:WowScriptRoot "Get-WowConfig.ps1"
+    if (-not (Test-Path $scriptPath)) {
+        Write-Host "Error: Script not found: $scriptPath" -ForegroundColor Red
+        return
+    }
     & $scriptPath @args
 }
 
@@ -83,6 +108,10 @@ function Get-WowInstallations {
         List detected WoW installations.
     #>
     $scriptPath = Join-Path $script:WowScriptRoot "Get-WowInstallations.ps1"
+    if (-not (Test-Path $scriptPath)) {
+        Write-Host "Error: Script not found: $scriptPath" -ForegroundColor Red
+        return
+    }
     & $scriptPath @args
 }
 
@@ -94,6 +123,10 @@ function Get-InstalledAddons {
         WoW installation to scan (retail, classic, classicCata, beta, ptr)
     #>
     $scriptPath = Join-Path $script:WowScriptRoot "Get-InstalledAddons.ps1"
+    if (-not (Test-Path $scriptPath)) {
+        Write-Host "Error: Script not found: $scriptPath" -ForegroundColor Red
+        return
+    }
     & $scriptPath @args
 }
 
@@ -105,6 +138,10 @@ function Update-AddonsJson {
         WoW installation to update (retail, classic, classicCata, beta, ptr)
     #>
     $scriptPath = Join-Path $script:WowScriptRoot "Update-AddonsJson.ps1"
+    if (-not (Test-Path $scriptPath)) {
+        Write-Host "Error: Script not found: $scriptPath" -ForegroundColor Red
+        return
+    }
     & $scriptPath @args
 }
 
