@@ -111,6 +111,6 @@ Write-Host "Configuration Created Successfully!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Cyan
-Write-Host "  1. Run Update-Wow to sync configuration from Azure" -ForegroundColor White
-Write-Host "  2. Or configure your addons and run Upload.ps1 from addonmanager repo" -ForegroundColor White
+Write-Host "  1. Run Wow-Download to sync configuration from Azure" -ForegroundColor White
+Write-Host "  2. Or configure your addons and run Wow-Upload" -ForegroundColor White
 Write-Host ""

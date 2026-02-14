@@ -46,22 +46,26 @@ This creates `wow.json` in your PowerShell profile directory with auto-detected 
 
 ```powershell
 # Sync all installations
-Update-Wow
+Wow-Download
+
+# Or use full command name
+Invoke-WowDownload
 
 # Sync specific installation
-Update-Wow -Installation retail
+Wow-Download -Installation retail
 ```
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `Update-Wow` | Download and sync WTF configuration from Azure |
-| `New-WowConfig` | Create initial wow.json configuration |
-| `Get-WowConfig` | Display current wow.json settings |
-| `Get-WowInstallations` | List detected WoW installations |
-| `Get-InstalledAddons` | List installed addons with metadata |
-| `Update-AddonsJson` | Regenerate addons.json from Interface/AddOns |
+| Command | Alias | Description |
+|---------|-------|-------------|
+| `Invoke-WowDownload` | `Wow-Download` | Download and sync WTF configuration from Azure |
+| `Invoke-WowUpload` | `Wow-Upload` | Upload WTF configuration to Azure (maintainers) |
+| `New-WowConfig` | - | Create initial wow.json configuration |
+| `Get-WowConfig` | - | Display current wow.json settings |
+| `Get-WowInstallations` | - | List detected WoW installations |
+| `Get-InstalledAddons` | - | List installed addons with metadata |
+| `Update-AddonsJson` | - | Regenerate addons.json from Interface/AddOns |
 
 ## Configuration
 
@@ -120,9 +124,10 @@ To upload WTF configurations to Azure (maintainers only):
    az account set --subscription 4js
    ```
 
-2. Run the upload script from repository root:
+2. Run the upload command:
    ```powershell
-   .\Upload.ps1
+   Wow-Upload
+   # Or: Invoke-WowUpload
    ```
 
 This script:
@@ -138,7 +143,8 @@ addonmanager/
 ├── Scripts/
 │   └── WoW/
 │       ├── Initialize-WowProfile.ps1
-│       ├── Update-Wow.ps1
+│       ├── Invoke-WowDownload.ps1
+│       ├── Invoke-WowUpload.ps1
 │       ├── Get-WowConfig.ps1
 │       ├── Get-WowInstallations.ps1
 │       ├── New-WowConfig.ps1
@@ -151,15 +157,14 @@ addonmanager/
 │   ├── classic/
 │   │   └── WTF/
 │   └── ...
-├── Upload.ps1
 └── README.md
 ```
 
 ## How It Works
 
-### Sync Process (Update-Wow)
+### Sync Process (Invoke-WowDownload / Wow-Download)
 
-1. Loads wow.json from profile directory
+1. Loads wow.json from profile directory (creates if missing)
 2. Verifies Azure resources exist (fails fast if not)
 3. Preserves Config.wtf to temp location
 4. Deletes WTF folder contents
@@ -167,7 +172,7 @@ addonmanager/
 6. Restores Config.wtf
 7. Generates addons.json from Interface/AddOns folder
 
-### Upload Process (Upload.ps1)
+### Upload Process (Invoke-WowUpload / Wow-Upload)
 
 1. Creates Azure resources if needed (resource group, storage account, container)
 2. Deletes existing blobs using `az storage blob delete-batch`
@@ -200,7 +205,7 @@ brew install azure-cli
 
 Error: "Azure storage not found"
 
-**Solution:** Run `Upload.ps1` from the addonmanager repository to initialize Azure resources.
+**Solution:** Run `Wow-Upload` (or `Invoke-WowUpload`) from your profile to initialize Azure resources.
 
 ### Not Logged Into Azure
 

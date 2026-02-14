@@ -15,8 +15,12 @@
     This script uses the repository as source of truth.
 
 .EXAMPLE
-    & ".\Upload.ps1"
+    Invoke-WowUpload
     Upload all WTF configurations to Azure
+
+.EXAMPLE
+    Wow-Upload
+    Using alias to upload configurations
 
 .NOTES
     Requires Azure CLI and authentication:

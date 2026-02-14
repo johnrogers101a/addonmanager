@@ -23,12 +23,16 @@
     Preview changes without applying
 
 .EXAMPLE
-    & ".\Update-Wow.ps1"
+    Invoke-WowDownload
     Sync all detected installations
 
 .EXAMPLE
-    & ".\Update-Wow.ps1" -Installation retail
+    Invoke-WowDownload -Installation retail
     Sync only retail installation
+
+.EXAMPLE
+    Wow-Download
+    Using alias to sync all installations
 #>
 
 [CmdletBinding()]

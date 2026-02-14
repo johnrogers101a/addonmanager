@@ -24,8 +24,8 @@ $ErrorActionPreference = 'Stop'
 # Get script directory for function calls
 $WowScriptRoot = $PSScriptRoot
 
-# WoW Configuration Management Functions
-function Update-Wow {
+# Primary WoW Management Functions
+function Invoke-WowDownload {
     <#
     .SYNOPSIS
         Download and sync WTF configuration from Azure Blob Storage.
@@ -34,10 +34,27 @@ function Update-Wow {
     .PARAMETER WhatIf
         Preview changes without applying
     #>
-    $scriptPath = Join-Path $WowScriptRoot "Update-Wow.ps1"
+    $scriptPath = Join-Path $WowScriptRoot "Invoke-WowDownload.ps1"
     & $scriptPath @args
 }
 
+function Invoke-WowUpload {
+    <#
+    .SYNOPSIS
+        Upload WTF configuration to Azure Blob Storage.
+    .DESCRIPTION
+        Uploads all WTF configurations from repository to Azure.
+        Creates Azure resources if they don't exist (idempotent).
+    #>
+    $scriptPath = Join-Path $WowScriptRoot "Invoke-WowUpload.ps1"
+    & $scriptPath @args
+}
+
+# Aliases for convenience
+Set-Alias -Name Wow-Download -Value Invoke-WowDownload
+Set-Alias -Name Wow-Upload -Value Invoke-WowUpload
+
+# Helper Functions
 function New-WowConfig {
     <#
     .SYNOPSIS
@@ -91,10 +108,16 @@ function Update-AddonsJson {
 
 Write-Host ""
 Write-Host "WoW Management Commands Loaded:" -ForegroundColor Cyan
-Write-Host "  Update-Wow              - Sync WTF configuration from Azure" -ForegroundColor Green
-Write-Host "  New-WowConfig           - Create initial wow.json" -ForegroundColor Green
-Write-Host "  Get-WowConfig           - Display wow.json settings" -ForegroundColor Green
-Write-Host "  Get-WowInstallations    - List detected installations" -ForegroundColor Green
-Write-Host "  Get-InstalledAddons     - List installed addons" -ForegroundColor Green
-Write-Host "  Update-AddonsJson       - Regenerate addons.json" -ForegroundColor Green
+Write-Host "  Wow-Download (Invoke-WowDownload)" -NoNewline -ForegroundColor Green
+Write-Host " - Sync WTF from Azure" -ForegroundColor Gray
+Write-Host "  Wow-Upload (Invoke-WowUpload)  " -NoNewline -ForegroundColor Green
+Write-Host " - Upload WTF to Azure" -ForegroundColor Gray
 Write-Host ""
+Write-Host "Helper Commands:" -ForegroundColor Cyan
+Write-Host "  New-WowConfig           - Create initial wow.json" -ForegroundColor Gray
+Write-Host "  Get-WowConfig           - Display wow.json settings" -ForegroundColor Gray
+Write-Host "  Get-WowInstallations    - List detected installations" -ForegroundColor Gray
+Write-Host "  Get-InstalledAddons     - List installed addons" -ForegroundColor Gray
+Write-Host "  Update-AddonsJson       - Regenerate addons.json" -ForegroundColor Gray
+Write-Host ""
+
