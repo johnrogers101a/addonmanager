@@ -209,7 +209,24 @@ Write-Host ""
 $configScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/Get-WowConfig.ps1"
 $config = & $configScript
 
-if (-not $config -or -not $config.installations) {
+if (-not $config) {
+    Write-Host ""
+    Write-Host "No WoW configuration found. Let's create one now..." -ForegroundColor Cyan
+    Write-Host ""
+    
+    $newConfigScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/New-WowConfig.ps1"
+    & $newConfigScript
+    
+    # Try loading again
+    $config = & $configScript
+    
+    if (-not $config) {
+        Write-Host "Error: Configuration creation failed or was cancelled." -ForegroundColor Red
+        exit 1
+    }
+}
+
+if (-not $config.installations -or $config.installations.Count -eq 0) {
     Write-Host "Error: No WoW installations configured" -ForegroundColor Red
     Write-Host "Please run New-WowConfig to set up your configuration." -ForegroundColor Red
     exit 1

@@ -26,7 +26,9 @@ try {
     $configPath = Join-Path $profileDir "wow.json"
     
     if (-not (Test-Path $configPath)) {
-        throw "wow.json not found at: $configPath`nRun New-WowConfig to create initial configuration."
+        Write-Host "Error loading wow.json: wow.json not found at: $configPath" -ForegroundColor Red
+        Write-Host "Run New-WowConfig to create initial configuration." -ForegroundColor Yellow
+        return $null
     }
     
     # Load and parse configuration
