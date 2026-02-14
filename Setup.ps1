@@ -117,6 +117,49 @@ if (Test-Path `$wowInitScript) {
     Write-Host "  ✓ Profile updated" -ForegroundColor Green
 }
 
+# Create wrapper scripts in Scripts/Profile for Show-Commands discovery
+Write-Host ""
+Write-Host "Creating wrapper scripts in Scripts/Profile..." -ForegroundColor Cyan
+
+$profileScriptsDir = Join-Path $profileDir "Scripts" "Profile"
+
+# Ensure Scripts/Profile exists
+if (-not (Test-Path $profileScriptsDir)) {
+    New-Item -ItemType Directory -Path $profileScriptsDir -Force | Out-Null
+}
+
+# Create Invoke-WowDownload wrapper
+$wowDownloadWrapper = @'
+#!/usr/bin/env pwsh
+<#
+.SYNOPSIS
+    Sync WTF configuration from Azure
+#>
+param()
+$wowScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/Invoke-WowDownload.ps1"
+& $wowScript @args
+'@
+
+$wowDownloadPath = Join-Path $profileScriptsDir "Invoke-WowDownload.ps1"
+$wowDownloadWrapper | Set-Content -Path $wowDownloadPath -Encoding UTF8
+Write-Host "  ✓ Invoke-WowDownload.ps1" -ForegroundColor Green
+
+# Create Invoke-WowUpload wrapper
+$wowUploadWrapper = @'
+#!/usr/bin/env pwsh
+<#
+.SYNOPSIS
+    Upload WTF configuration to Azure
+#>
+param()
+$wowScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/Invoke-WowUpload.ps1"
+& $wowScript @args
+'@
+
+$wowUploadPath = Join-Path $profileScriptsDir "Invoke-WowUpload.ps1"
+$wowUploadWrapper | Set-Content -Path $wowUploadPath -Encoding UTF8
+Write-Host "  ✓ Invoke-WowUpload.ps1" -ForegroundColor Green
+
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green
 Write-Host "Installation Complete!" -ForegroundColor Green
