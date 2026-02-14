@@ -4,6 +4,15 @@ WTF/*/
 # Keep directory structure
 !WTF/.gitkeep
 
+# Secrets and credentials (NEVER COMMIT)
+*.key
+*.pem
+*.pfx
+*.p12
+*secret*
+*credential*
+*.env
+
 # Local testing
 *.local.ps1
 test-*.ps1
