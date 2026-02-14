@@ -7,9 +7,11 @@
     Defines wrapper functions for WoW addon and configuration management.
     Functions call corresponding scripts in the same directory.
     Pattern follows powershell-config Initialize-PowerShellProfile.ps1.
+    
+    Silent initialization - does not print output (integrated with Show-Commands).
 
 .EXAMPLE
-    . "C:\Path\To\addonmanager\Scripts\WoW\Initialize-WowProfile.ps1"
+    . "C:\Path\To\Scripts\WoW\Initialize-WowProfile.ps1"
     Loads WoW management functions into current session.
 
 .OUTPUTS
@@ -106,18 +108,7 @@ function Update-AddonsJson {
     & $scriptPath @args
 }
 
-Write-Host ""
-Write-Host "WoW Management Commands Loaded:" -ForegroundColor Cyan
-Write-Host "  Wow-Download (Invoke-WowDownload)" -NoNewline -ForegroundColor Green
-Write-Host " - Sync WTF from Azure" -ForegroundColor Gray
-Write-Host "  Wow-Upload (Invoke-WowUpload)  " -NoNewline -ForegroundColor Green
-Write-Host " - Upload WTF to Azure" -ForegroundColor Gray
-Write-Host ""
-Write-Host "Helper Commands:" -ForegroundColor Cyan
-Write-Host "  New-WowConfig           - Create initial wow.json" -ForegroundColor Gray
-Write-Host "  Get-WowConfig           - Display wow.json settings" -ForegroundColor Gray
-Write-Host "  Get-WowInstallations    - List detected installations" -ForegroundColor Gray
-Write-Host "  Get-InstalledAddons     - List installed addons" -ForegroundColor Gray
-Write-Host "  Update-AddonsJson       - Regenerate addons.json" -ForegroundColor Gray
-Write-Host ""
+# Silent initialization - no output
+# Commands will be shown by existing Show-Commands function
+
 
