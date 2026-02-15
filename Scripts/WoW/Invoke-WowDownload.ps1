@@ -265,6 +265,16 @@ foreach ($key in $installationsToSync) {
 }
 
 Write-Host "========================================" -ForegroundColor Green
-Write-Host "Sync Complete!" -ForegroundColor Green
+Write-Host "WTF Sync Complete!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
+
+# Install/update addons from GitHub
+$profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
+$getAddonsScript = Join-Path $profileDir "Scripts" "WoW" "Invoke-GetAddons.ps1"
+
+if (Test-Path $getAddonsScript) {
+    & $getAddonsScript -Installation $Installation
+} else {
+    Write-Host "⚠ Invoke-GetAddons.ps1 not found — run Setup.ps1 to enable addon installs" -ForegroundColor Yellow
+}
