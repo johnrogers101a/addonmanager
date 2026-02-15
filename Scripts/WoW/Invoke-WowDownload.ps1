@@ -197,34 +197,58 @@ foreach ($key in $installationsToSync) {
     Write-Host "  Downloading from Azure..." -ForegroundColor Gray
     $blobPrefix = "$key/WTF"
     
-    $downloadResult = az storage blob download-batch `
-        --account-name $config.azureStorageAccount `
-        --source $config.azureContainer `
-        --destination $wtfPath `
-        --pattern "$blobPrefix/*" `
-        --output json `
-        2>&1
+    # Download to temp location to handle path stripping
+    $tempDownloadDir = Join-Path ([IO.Path]::GetTempPath()) "wow-download-$(Get-Random)"
+    New-Item -ItemType Directory -Path $tempDownloadDir -Force | Out-Null
     
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "    ✗ Download failed" -ForegroundColor Red
-        Write-Host "    Error: $downloadResult" -ForegroundColor Red
-        
-        # Restore Config.wtf if we saved it
-        if ($tempConfigPath -and (Test-Path $tempConfigPath)) {
-            Copy-Item -Path $tempConfigPath -Destination $configWtfPath -Force
-            Remove-Item -Path $tempConfigPath -Force
-        }
-        continue
-    }
-    
-    # Parse download result to get file count
     try {
-        $downloaded = $downloadResult | ConvertFrom-Json
-        $fileCount = if ($downloaded -is [array]) { $downloaded.Count } else { 1 }
-        Write-Host "    ✓ Downloaded $fileCount files" -ForegroundColor Green
+        $downloadResult = az storage blob download-batch `
+            --account-name $config.azureStorageAccount `
+            --source $config.azureContainer `
+            --destination $tempDownloadDir `
+            --pattern "$blobPrefix/*" `
+            --output json `
+            2>&1
+        
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "    ✗ Download failed" -ForegroundColor Red
+            Write-Host "    Error: $downloadResult" -ForegroundColor Red
+            
+            # Restore Config.wtf if we saved it
+            if ($tempConfigPath -and (Test-Path $tempConfigPath)) {
+                Copy-Item -Path $tempConfigPath -Destination $configWtfPath -Force
+                Remove-Item -Path $tempConfigPath -Force
+            }
+            continue
+        }
+        
+        # Move files from temp/retail/WTF/* to $wtfPath
+        $downloadedWtfPath = Join-Path $tempDownloadDir $key "WTF"
+        if (Test-Path $downloadedWtfPath) {
+            $items = Get-ChildItem -Path $downloadedWtfPath -Force
+            foreach ($item in $items) {
+                $destPath = Join-Path $wtfPath $item.Name
+                Move-Item -Path $item.FullName -Destination $destPath -Force
+            }
+            
+            # Parse download result to get file count
+            try {
+                $downloaded = $downloadResult | ConvertFrom-Json
+                $fileCount = if ($downloaded -is [array]) { $downloaded.Count } else { 1 }
+                Write-Host "    ✓ Downloaded $fileCount files" -ForegroundColor Green
+            }
+            catch {
+                Write-Host "    ✓ Download completed" -ForegroundColor Green
+            }
+        } else {
+            Write-Host "    ⚠ No files downloaded" -ForegroundColor Yellow
+        }
     }
-    catch {
-        Write-Host "    ✓ Download completed" -ForegroundColor Green
+    finally {
+        # Clean up temp download directory
+        if (Test-Path $tempDownloadDir) {
+            Remove-Item -Path $tempDownloadDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
     }
     
     # Restore Config.wtf
