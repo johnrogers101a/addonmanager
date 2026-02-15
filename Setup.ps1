@@ -162,6 +162,9 @@ foreach ($cmd in @(
 <#
 .SYNOPSIS
     $($cmd.Synopsis)
+
+.DESCRIPTION
+    $($cmd.Synopsis)
 #>
 param()
 `$wowScript = Join-Path (Split-Path -Parent `$PSScriptRoot) "WoW" "$($cmd.Script)"
