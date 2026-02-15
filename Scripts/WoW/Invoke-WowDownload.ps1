@@ -7,28 +7,35 @@
     Syncs WoW addon configuration from Azure:
     1. Loads wow.json configuration
     2. Validates Azure resources exist (fails fast if not)
-    3. Preserves Config.wtf to temp location
-    4. Deletes WTF folder contents
-    5. Downloads all files from Azure using az CLI
-    6. Restores Config.wtf
-    7. Generates addons.json from Interface/AddOns
+    3. Resolves version (latest or specific)
+    4. Preserves Config.wtf to temp location
+    5. Deletes WTF folder contents
+    6. Downloads all files from Azure using az CLI
+    7. Restores Config.wtf
+    8. Installs addons from GitHub via Get-Addons
     
     Uses complete replacement strategy - no file comparison.
+    Supports versioned downloads — each Wow-Upload creates a new version.
 
 .PARAMETER Installation
     WoW installation to sync (retail, classic, classicCata, beta, ptr, all)
     Default: all
+
+.PARAMETER Version
+    Version to download. Use a number (e.g. 1, 2, 3) for a specific version,
+    or 'latest' to automatically use the most recent version.
+    Default: latest
 
 .PARAMETER WhatIf
     Preview changes without applying
 
 .EXAMPLE
     Invoke-WowDownload
-    Sync all detected installations
+    Sync latest version of all detected installations
 
 .EXAMPLE
-    Invoke-WowDownload -Installation retail
-    Sync only retail installation
+    Invoke-WowDownload -Version 3
+    Sync version 3
 
 .EXAMPLE
     Wow-Download
@@ -40,6 +47,9 @@ param(
     [Parameter()]
     [ValidateSet('retail', 'classic', 'classicCata', 'beta', 'ptr', 'all')]
     [string]$Installation = 'all',
+
+    [Parameter()]
+    [string]$Version = 'latest',
     
     [Parameter()]
     [switch]$WhatIf
@@ -137,6 +147,56 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "  ✓ Azure storage account verified" -ForegroundColor Green
 Write-Host ""
 
+# Resolve version
+Write-Host "Resolving version..." -ForegroundColor Cyan
+$storageKey = az storage account keys list `
+    --account-name $config.azureStorageAccount `
+    --resource-group $config.azureResourceGroup `
+    --query "[0].value" --output tsv 2>&1
+
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($storageKey)) {
+    Write-Host "  ✗ Failed to retrieve storage key" -ForegroundColor Red
+    return
+}
+
+$blobListJson = az storage blob list `
+    --account-name $config.azureStorageAccount `
+    --account-key $storageKey `
+    --container-name $config.azureContainer `
+    --output json 2>&1
+
+$availableVersions = @()
+if ($LASTEXITCODE -eq 0) {
+    try {
+        $blobs = $blobListJson | ConvertFrom-Json
+        $availableVersions = $blobs | ForEach-Object {
+            if ($_.name -match '^v(\d+)/') { [int]$Matches[1] }
+        } | Sort-Object -Unique
+    } catch {}
+}
+
+if (-not $availableVersions -or $availableVersions.Count -eq 0) {
+    Write-Host "  ✗ No versions found in storage" -ForegroundColor Red
+    Write-Host "  Run Wow-Upload first to create a version." -ForegroundColor Yellow
+    return
+}
+
+$latestVersion = ($availableVersions | Measure-Object -Maximum).Maximum
+
+if ($Version -eq 'latest') {
+    $resolvedVersion = $latestVersion
+    Write-Host "  ✓ Latest version: v$resolvedVersion" -ForegroundColor Green
+} else {
+    $resolvedVersion = [int]$Version
+    if ($resolvedVersion -notin $availableVersions) {
+        Write-Host "  ✗ Version v$resolvedVersion not found" -ForegroundColor Red
+        Write-Host "  Available versions: $(($availableVersions | ForEach-Object { "v$_" }) -join ', ')" -ForegroundColor Yellow
+        return
+    }
+    Write-Host "  ✓ Using version: v$resolvedVersion" -ForegroundColor Green
+}
+Write-Host ""
+
 # Determine installations to sync
 $installationsToSync = @()
 
@@ -168,7 +228,7 @@ foreach ($key in $installationsToSync) {
     $wtfPath = Join-Path $installPath "WTF"
     $configWtfPath = Join-Path $wtfPath "Config.wtf"
     
-    Write-Host "Syncing: $($installInfo.description) ($($installInfo.path))" -ForegroundColor Cyan
+    Write-Host "Syncing: $($installInfo.description) ($($installInfo.path)) - v$resolvedVersion" -ForegroundColor Cyan
     
     if ($WhatIf) {
         Write-Host "  [WhatIf] Would sync WTF folder" -ForegroundColor Yellow
@@ -194,8 +254,8 @@ foreach ($key in $installationsToSync) {
     Write-Host "    ✓ Cleared" -ForegroundColor Green
     
     # Download from Azure
-    Write-Host "  Downloading from Azure..." -ForegroundColor Cyan
-    $blobPrefix = "$key/WTF"
+    Write-Host "  Downloading from Azure (v$resolvedVersion)..." -ForegroundColor Cyan
+    $blobPrefix = "v$resolvedVersion/$key/WTF"
     Write-Host "    Source: $($config.azureStorageAccount)/$($config.azureContainer)/$blobPrefix" -ForegroundColor Gray
     
     # Download to temp location to handle path stripping
@@ -208,10 +268,10 @@ foreach ($key in $installationsToSync) {
         Write-Host ""
         az storage blob download-batch `
             --account-name $config.azureStorageAccount `
+            --account-key $storageKey `
             --source $config.azureContainer `
             --destination $tempDownloadDir `
             --pattern "$blobPrefix/*" `
-            --auth-mode login `
             --output none
         Write-Host ""
         
@@ -226,8 +286,8 @@ foreach ($key in $installationsToSync) {
             continue
         }
         
-        # Move files from temp/retail/WTF/* to $wtfPath
-        $downloadedWtfPath = Join-Path $tempDownloadDir $key "WTF"
+        # Move files from temp/v{N}/retail/WTF/* to $wtfPath
+        $downloadedWtfPath = Join-Path $tempDownloadDir "v$resolvedVersion" $key "WTF"
         if (Test-Path $downloadedWtfPath) {
             $items = Get-ChildItem -Path $downloadedWtfPath -Force
             $fileCount = (Get-ChildItem -Path $downloadedWtfPath -Recurse -File -Force).Count
@@ -261,7 +321,7 @@ foreach ($key in $installationsToSync) {
 }
 
 Write-Host "========================================" -ForegroundColor Green
-Write-Host "WTF Sync Complete!" -ForegroundColor Green
+Write-Host "WTF Sync Complete! (v$resolvedVersion)" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
 
@@ -270,7 +330,7 @@ $profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
 $getAddonsScript = Join-Path $profileDir "Scripts" "WoW" "Invoke-GetAddons.ps1"
 
 if (Test-Path $getAddonsScript) {
-    & $getAddonsScript -Installation $Installation
+    & $getAddonsScript -Installation $Installation -SyncOnly
 } else {
     Write-Host "⚠ Invoke-GetAddons.ps1 not found — run Setup.ps1 to enable addon installs" -ForegroundColor Yellow
 }

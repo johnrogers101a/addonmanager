@@ -57,6 +57,9 @@ param(
     [switch]$Force,
 
     [Parameter()]
+    [switch]$SyncOnly,
+
+    [Parameter()]
     [switch]$WhatIf
 )
 
@@ -152,6 +155,78 @@ if ($Installation -eq 'all') {
 # ── Build addon list ─────────────────────────────────────────────────────────
 
 $addonEntries = $addonRepos.addons.PSObject.Properties
+
+# When SyncOnly, restrict to addons that exist in addons.json (what was uploaded)
+$syncFilter = $null
+if ($SyncOnly) {
+    $syncFilter = [System.Collections.Generic.HashSet[string]]::new(
+        [System.StringComparer]::OrdinalIgnoreCase
+    )
+    foreach ($installKey in $installationsToProcess) {
+        $installInfo = $config.installations.$installKey
+        $wtfPath = Join-Path $config.wowRoot $installInfo.path "WTF"
+        $addonsJsonPath = Join-Path $wtfPath "addons.json"
+        if (Test-Path $addonsJsonPath) {
+            $addonsJsonData = Get-Content $addonsJsonPath -Raw | ConvertFrom-Json
+            foreach ($a in $addonsJsonData.addons) {
+                $syncFilter.Add($a.folder) | Out-Null
+            }
+        }
+    }
+    $addonEntries = $addonEntries | Where-Object { $syncFilter.Contains($_.Name) }
+    Write-Host "Sync mode: restricting to $($syncFilter.Count) addons from addons.json" -ForegroundColor Gray
+}
+
+# Pre-filter: exclude addons whose hard dependencies can never be satisfied.
+# A dependency is unsatisfiable if it's in addon-repos.json with no GitHub source.
+$uninstallable = [System.Collections.Generic.HashSet[string]]::new(
+    [string[]]($addonRepos.addons.PSObject.Properties |
+        Where-Object { -not $_.Value.github.owner -or -not $_.Value.github.repo } |
+        ForEach-Object { $_.Name }),
+    [System.StringComparer]::OrdinalIgnoreCase
+)
+
+# Build dependency map from addon-repos.json — check .toc files on disk for ## Dependencies
+$excludedAddons = [System.Collections.Generic.HashSet[string]]::new(
+    [System.StringComparer]::OrdinalIgnoreCase
+)
+
+# Cascading: if A depends on B (uninstallable), exclude A. If C depends on A, exclude C too.
+$changed = $true
+while ($changed) {
+    $changed = $false
+    foreach ($entry in @($addonEntries)) {
+        if ($excludedAddons.Contains($entry.Name)) { continue }
+
+        # Check all installations for .toc dependency declarations
+        foreach ($installKey in $installationsToProcess) {
+            $installInfo = $config.installations.$installKey
+            $addonsPath = Join-Path $config.wowRoot $installInfo.path "Interface" "AddOns"
+            $tocFile = Join-Path $addonsPath $entry.Name "$($entry.Name).toc"
+
+            if (Test-Path $tocFile) {
+                $depLine = Get-Content $tocFile -Encoding UTF8 -ErrorAction SilentlyContinue |
+                    Where-Object { $_ -match '##\s*Dependencies\s*:\s*(.+)' }
+                if ($depLine -and $depLine -match '##\s*Dependencies\s*:\s*(.+)') {
+                    $deps = $Matches[1] -split '\s*,\s*' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+                    foreach ($dep in $deps) {
+                        if ($uninstallable.Contains($dep) -or $excludedAddons.Contains($dep)) {
+                            Write-Host "  ⚠ $($entry.Name) - depends on '$dep' which cannot be installed, excluding" -ForegroundColor Yellow
+                            $excludedAddons.Add($entry.Name) | Out-Null
+                            $uninstallable.Add($entry.Name) | Out-Null
+                            $changed = $true
+                            break
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+if ($excludedAddons.Count -gt 0) {
+    $addonEntries = @($addonEntries | Where-Object { -not $excludedAddons.Contains($_.Name) })
+}
 
 if ($Addon) {
     $match = $addonEntries | Where-Object { $_.Name -eq $Addon }
@@ -381,58 +456,47 @@ foreach ($installKey in $installationsToProcess) {
     Write-Host "  Results: $installed installed, $skipped already present, $warnings warnings, $failed failed" -ForegroundColor Cyan
     Write-Host ""
 
-    # ── Dependency check ─────────────────────────────────────────────────────
-    # Scan all installed addons for ## Dependencies and remove any whose
-    # hard dependencies are not present in the AddOns folder.
+    # ── Remove addons with unsatisfiable dependencies ──────────────────────────
+    # Re-scan .toc files now that addons are installed to catch newly-installed
+    # addons whose dependencies can't be satisfied.
 
     Write-Host "Checking dependencies..." -ForegroundColor Cyan
-
     $removed = 0
-    $checked = 0
-    $installedAddons = Get-ChildItem -Path $addonsPath -Directory -ErrorAction SilentlyContinue
 
-    if ($installedAddons) {
-        # Build set of installed addon folder names
-        $installedSet = [System.Collections.Generic.HashSet[string]]::new(
-            [string[]]($installedAddons | ForEach-Object { $_.Name }),
-            [System.StringComparer]::OrdinalIgnoreCase
-        )
+    $postUninstallable = [System.Collections.Generic.HashSet[string]]::new(
+        [string[]]($addonRepos.addons.PSObject.Properties |
+            Where-Object { -not $_.Value.github.owner -or -not $_.Value.github.repo } |
+            ForEach-Object { $_.Name }),
+        [System.StringComparer]::OrdinalIgnoreCase
+    )
 
-        # Keep removing until no more broken deps (cascading removal)
-        $removedThisPass = $true
-        while ($removedThisPass) {
-            $removedThisPass = $false
-
-            foreach ($addonDir in @(Get-ChildItem -Path $addonsPath -Directory -ErrorAction SilentlyContinue)) {
-                if (-not $installedSet.Contains($addonDir.Name)) { continue }
-
-                $tocFile = Join-Path $addonDir.FullName "$($addonDir.Name).toc"
-                if (-not (Test-Path $tocFile)) { continue }
-
-                $checked++
-                $depLine = Get-Content $tocFile -Encoding UTF8 -ErrorAction SilentlyContinue |
-                    Where-Object { $_ -match '##\s*Dependencies\s*:\s*(.+)' }
-
-                if (-not $depLine) { continue }
-                if ($depLine -notmatch '##\s*Dependencies\s*:\s*(.+)') { continue }
-
-                $deps = $Matches[1] -split '\s*,\s*' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
-                $missingDeps = @($deps | Where-Object { -not $installedSet.Contains($_) })
-
-                if ($missingDeps.Count -gt 0) {
-                    $missingList = $missingDeps -join ', '
-                    Write-Host "  ✗ $($addonDir.Name) - missing dependencies: $missingList (removing)" -ForegroundColor Red
-                    Remove-Item -Path $addonDir.FullName -Recurse -Force -ErrorAction SilentlyContinue
-                    $installedSet.Remove($addonDir.Name) | Out-Null
+    $removedThisPass = $true
+    while ($removedThisPass) {
+        $removedThisPass = $false
+        foreach ($dir in @(Get-ChildItem -Path $addonsPath -Directory -ErrorAction SilentlyContinue)) {
+            if ($postUninstallable.Contains($dir.Name)) { continue }
+            $tocFile = Join-Path $dir.FullName "$($dir.Name).toc"
+            if (-not (Test-Path $tocFile)) { continue }
+            $depLine = Get-Content $tocFile -Encoding UTF8 -ErrorAction SilentlyContinue |
+                Where-Object { $_ -match '##\s*Dependencies\s*:\s*(.+)' }
+            if (-not $depLine) { continue }
+            if ($depLine -notmatch '##\s*Dependencies\s*:\s*(.+)') { continue }
+            $deps = $Matches[1] -split '\s*,\s*' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+            foreach ($dep in $deps) {
+                if ($postUninstallable.Contains($dep)) {
+                    Write-Host "  ✗ $($dir.Name) - depends on '$dep' which cannot be installed (removing)" -ForegroundColor Red
+                    Remove-Item -Path $dir.FullName -Recurse -Force -ErrorAction SilentlyContinue
+                    $postUninstallable.Add($dir.Name) | Out-Null
                     $removed++
                     $removedThisPass = $true
+                    break
                 }
             }
         }
     }
 
     if ($removed -gt 0) {
-        Write-Host "  Removed $removed addon(s) with missing dependencies" -ForegroundColor Yellow
+        Write-Host "  Removed $removed addon(s) with unsatisfiable dependencies" -ForegroundColor Yellow
     } else {
         Write-Host "  ✓ All dependencies satisfied" -ForegroundColor Green
     }

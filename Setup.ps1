@@ -221,7 +221,165 @@ if (Test-Path $profilePath) {
 
 Write-Host ""
 
-# ── Step 4: Detect WoW installation and create wow.json ──────────────────────
+# ── Step 4: Check dependencies and offer to install ──────────────────────────
+
+Write-Host "Checking dependencies..." -ForegroundColor Cyan
+
+$missingDeps = @()
+
+# Azure CLI
+if (Get-Command az -ErrorAction SilentlyContinue) {
+    Write-Host "  ✓ Azure CLI: $((Get-Command az).Source)" -ForegroundColor Green
+} else {
+    Write-Host "  ✗ Azure CLI not found" -ForegroundColor Red
+    $missingDeps += 'az'
+}
+
+# GitHub CLI
+if (Get-Command gh -ErrorAction SilentlyContinue) {
+    Write-Host "  ✓ GitHub CLI: $((Get-Command gh).Source)" -ForegroundColor Green
+} else {
+    Write-Host "  ✗ GitHub CLI not found" -ForegroundColor Red
+    $missingDeps += 'gh'
+}
+
+if ($missingDeps.Count -gt 0) {
+    Write-Host ""
+    $installChoice = Read-Host "  Install missing dependencies? (Y/n)"
+    if ($installChoice -eq '' -or $installChoice -eq 'y' -or $installChoice -eq 'Y') {
+        foreach ($dep in $missingDeps) {
+            if ($IsWindows -or $env:OS -match 'Windows') {
+                switch ($dep) {
+                    'az' { Write-Host "  Installing Azure CLI..." -ForegroundColor Cyan; winget install Microsoft.AzureCLI --accept-source-agreements --accept-package-agreements 2>&1 | Out-Null }
+                    'gh' { Write-Host "  Installing GitHub CLI..." -ForegroundColor Cyan; winget install GitHub.cli --accept-source-agreements --accept-package-agreements 2>&1 | Out-Null }
+                }
+            } elseif ($IsMacOS) {
+                switch ($dep) {
+                    'az' { Write-Host "  Installing Azure CLI..." -ForegroundColor Cyan; brew install azure-cli 2>&1 | Out-Null }
+                    'gh' { Write-Host "  Installing GitHub CLI..." -ForegroundColor Cyan; brew install gh 2>&1 | Out-Null }
+                }
+            } else {
+                switch ($dep) {
+                    'az' {
+                        Write-Host "  Installing Azure CLI..." -ForegroundColor Cyan
+                        if (Get-Command dnf -ErrorAction SilentlyContinue) {
+                            sudo dnf install -y azure-cli 2>&1 | Out-Null
+                        } elseif (Get-Command apt -ErrorAction SilentlyContinue) {
+                            curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash 2>&1 | Out-Null
+                        } else {
+                            Write-Host "  ⚠ Could not detect package manager. Install manually: https://aka.ms/azure-cli" -ForegroundColor Yellow
+                        }
+                    }
+                    'gh' {
+                        Write-Host "  Installing GitHub CLI..." -ForegroundColor Cyan
+                        if (Get-Command dnf -ErrorAction SilentlyContinue) {
+                            sudo dnf install -y gh 2>&1 | Out-Null
+                        } elseif (Get-Command apt -ErrorAction SilentlyContinue) {
+                            sudo apt install -y gh 2>&1 | Out-Null
+                        } else {
+                            Write-Host "  ⚠ Could not detect package manager. Install manually: https://cli.github.com" -ForegroundColor Yellow
+                        }
+                    }
+                }
+            }
+
+            if (Get-Command $dep -ErrorAction SilentlyContinue) {
+                Write-Host "  ✓ $dep installed" -ForegroundColor Green
+            } else {
+                Write-Host "  ⚠ $dep may need a shell restart to be available" -ForegroundColor Yellow
+            }
+        }
+    } else {
+        Write-Host ""
+        Write-Host "  Manual install instructions:" -ForegroundColor White
+        if ($IsWindows -or $env:OS -match 'Windows') {
+            if ($missingDeps -contains 'az') { Write-Host "    winget install Microsoft.AzureCLI" -ForegroundColor Yellow }
+            if ($missingDeps -contains 'gh') { Write-Host "    winget install GitHub.cli" -ForegroundColor Yellow }
+        } elseif ($IsMacOS) {
+            if ($missingDeps -contains 'az') { Write-Host "    brew install azure-cli" -ForegroundColor Yellow }
+            if ($missingDeps -contains 'gh') { Write-Host "    brew install gh" -ForegroundColor Yellow }
+        } else {
+            if ($missingDeps -contains 'az') { Write-Host "    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash" -ForegroundColor Yellow }
+            if ($missingDeps -contains 'gh') { Write-Host "    sudo apt install gh  (or)  sudo dnf install gh" -ForegroundColor Yellow }
+        }
+        Write-Host ""
+        Write-Host "========================================" -ForegroundColor Yellow
+        Write-Host "Setup Partially Complete" -ForegroundColor Yellow
+        Write-Host "========================================" -ForegroundColor Yellow
+        Write-Host "  Install dependencies, then run Setup.ps1 again." -ForegroundColor White
+        Write-Host ""
+        exit 0
+    }
+}
+Write-Host ""
+
+# ── Step 5: Verify Azure authentication and get subscription ─────────────────
+
+Write-Host "Verifying Azure authentication..." -ForegroundColor Cyan
+
+if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
+    Write-Host "  ⚠ Azure CLI still not available — restart your shell and run Setup.ps1 again" -ForegroundColor Yellow
+    exit 0
+}
+
+$azAccountJson = az account show --output json 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "  ⚠ Not logged into Azure" -ForegroundColor Yellow
+    Write-Host "  Run: az login" -ForegroundColor Yellow
+    Write-Host "  Then run Setup.ps1 again." -ForegroundColor White
+    exit 0
+}
+
+$azAccount = $azAccountJson | ConvertFrom-Json
+$currentSub = $azAccount.name
+$currentSubId = $azAccount.id
+$azureEmail = $azAccount.user.name
+
+Write-Host "  ✓ Logged into Azure" -ForegroundColor Green
+Write-Host "  Subscription: $currentSub ($currentSubId)" -ForegroundColor Gray
+Write-Host "  Account: $azureEmail" -ForegroundColor Gray
+Write-Host ""
+
+$subConfirm = Read-Host "  Use subscription '$currentSub'? (Y/n)"
+if ($subConfirm -ne '' -and $subConfirm -ne 'y' -and $subConfirm -ne 'Y') {
+    # List available subscriptions
+    Write-Host ""
+    Write-Host "  Available subscriptions:" -ForegroundColor Cyan
+    az account list --query "[].{Name:name, Id:id}" --output table 2>&1
+    Write-Host ""
+    $newSub = Read-Host "  Enter subscription name or ID"
+    az account set --subscription $newSub 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "  ✗ Failed to set subscription: $newSub" -ForegroundColor Red
+        exit 1
+    }
+    $azAccountJson = az account show --output json 2>&1
+    $azAccount = $azAccountJson | ConvertFrom-Json
+    $currentSub = $azAccount.name
+    $currentSubId = $azAccount.id
+    $azureEmail = $azAccount.user.name
+    Write-Host "  ✓ Subscription set: $currentSub" -ForegroundColor Green
+}
+Write-Host ""
+
+# ── Step 6: Derive per-user storage account name ─────────────────────────────
+
+# Extract username from Azure email (before @), lowercase, alphanumeric only
+$username = ($azureEmail -split '@')[0] -replace '[^a-z0-9]', ''
+# Storage account: st{username}wowwus3 — max 24 chars total
+# Prefix "st" (2) + suffix "wowwus3" (7) = 9 fixed chars, 15 available for username
+$maxUsernameLen = 15
+if ($username.Length -gt $maxUsernameLen) {
+    $username = $username.Substring(0, $maxUsernameLen)
+}
+$storageAccountName = "st${username}wowwus3"
+
+Write-Host "Storage account: $storageAccountName (derived from $azureEmail)" -ForegroundColor Cyan
+Write-Verbose "Username extracted: $username"
+Write-Verbose "Storage account name length: $($storageAccountName.Length) (max 24)"
+Write-Host ""
+
+# ── Step 7: Detect WoW installation and create wow.json ──────────────────────
 
 Write-Host "Configuring WoW installation..." -ForegroundColor Cyan
 
@@ -242,7 +400,6 @@ $candidatePaths = @()
 if ($IsWindows -or $env:OS -match 'Windows') {
     $candidatePaths += "C:\Program Files (x86)\World of Warcraft"
     $candidatePaths += "C:\Program Files\World of Warcraft"
-    # Check all drive letters
     foreach ($drive in @('D', 'E', 'F', 'G')) {
         $candidatePaths += "${drive}:\Games\World of Warcraft"
         $candidatePaths += "${drive}:\World of Warcraft"
@@ -250,10 +407,8 @@ if ($IsWindows -or $env:OS -match 'Windows') {
 } elseif ($IsMacOS) {
     $candidatePaths += "/Applications/World of Warcraft"
 } else {
-    # Linux: Lutris, Steam Proton
     $candidatePaths += Join-Path $HOME "Games" "world-of-warcraft"
     $candidatePaths += Join-Path $HOME "Games" "battlenet" "drive_c" "Program Files (x86)" "World of Warcraft"
-    # Steam Proton common paths
     $steamBase = Join-Path $HOME ".steam" "steam" "steamapps" "compatdata"
     if (Test-Path $steamBase) {
         $protonDirs = Get-ChildItem -Path $steamBase -Directory -ErrorAction SilentlyContinue
@@ -261,7 +416,6 @@ if ($IsWindows -or $env:OS -match 'Windows') {
             $candidatePaths += Join-Path $d.FullName "pfx" "drive_c" "Program Files (x86)" "World of Warcraft"
         }
     }
-    # Flatpak Steam
     $flatpakSteamBase = Join-Path $HOME ".var" "app" "com.valvesoftware.Steam" ".local" "share" "Steam" "steamapps" "compatdata"
     if (Test-Path $flatpakSteamBase) {
         $protonDirs = Get-ChildItem -Path $flatpakSteamBase -Directory -ErrorAction SilentlyContinue
@@ -272,26 +426,36 @@ if ($IsWindows -or $env:OS -match 'Windows') {
 }
 
 Write-Verbose "Candidate paths to search:"
-foreach ($p in $candidatePaths) {
-    Write-Verbose "  $p"
-}
+foreach ($p in $candidatePaths) { Write-Verbose "  $p" }
 
-# Try each candidate path
+# If wow.json already exists and has a valid wowRoot, use it
 $wowRoot = $null
 $installations = $null
 
-foreach ($candidate in $candidatePaths) {
-    Write-Verbose "Checking: $candidate"
-    if (Test-Path $candidate) {
-        Write-Verbose "  Path exists, detecting installations..."
-        $found = & $detectScript -WowRoot $candidate -ErrorAction SilentlyContinue
+if (Test-Path $configPath) {
+    $existingConfig = Get-Content $configPath -Raw | ConvertFrom-Json -ErrorAction SilentlyContinue
+    if ($existingConfig.wowRoot -and (Test-Path $existingConfig.wowRoot)) {
+        $found = & $detectScript -WowRoot $existingConfig.wowRoot -ErrorAction SilentlyContinue
         if ($found -and $found.Count -gt 0) {
-            $wowRoot = $candidate
+            $wowRoot = $existingConfig.wowRoot
             $installations = $found
-            Write-Verbose "  Found $($found.Count) installation(s)"
-            break
+            Write-Verbose "Using existing wow.json wowRoot: $wowRoot"
         }
-        Write-Verbose "  No valid installations found"
+    }
+}
+
+# Try each candidate path
+if (-not $wowRoot) {
+    foreach ($candidate in $candidatePaths) {
+        Write-Verbose "Checking: $candidate"
+        if (Test-Path $candidate) {
+            $found = & $detectScript -WowRoot $candidate -ErrorAction SilentlyContinue
+            if ($found -and $found.Count -gt 0) {
+                $wowRoot = $candidate
+                $installations = $found
+                break
+            }
+        }
     }
 }
 
@@ -308,7 +472,6 @@ if (-not $wowRoot) {
             continue
         }
 
-        # Normalize path
         $userPath = $userPath.Trim().Trim('"').Trim("'")
         Write-Verbose "User provided path (normalized): $userPath"
 
@@ -322,12 +485,10 @@ if (-not $wowRoot) {
             continue
         }
 
-        Write-Verbose "  Path exists and is a directory, detecting installations..."
         $found = & $detectScript -WowRoot $userPath -ErrorAction SilentlyContinue
         if (-not $found -or $found.Count -eq 0) {
             Write-Host "  ✗ No WoW installations found in: $userPath" -ForegroundColor Red
             Write-Host "    Expected subfolders: _retail_, _classic_, _classic_era_, _beta_, _ptr_" -ForegroundColor Gray
-            Write-Host "    Each must contain Interface/ and WTF/ directories" -ForegroundColor Gray
             continue
         }
 
@@ -337,14 +498,9 @@ if (-not $wowRoot) {
 }
 
 Write-Host "  ✓ WoW root: $wowRoot" -ForegroundColor Green
-Write-Verbose "WoW root resolved: $wowRoot"
-
 foreach ($key in $installations.Keys) {
-    $installPath = Join-Path $wowRoot $installations[$key].path
     Write-Host "  ✓ $($installations[$key].description)" -ForegroundColor Green
-    Write-Verbose "  Installation '$key': $installPath"
-    Write-Verbose "    Interface: $(Join-Path $installPath 'Interface')"
-    Write-Verbose "    WTF: $(Join-Path $installPath 'WTF')"
+    Write-Verbose "  Installation '$key': $(Join-Path $wowRoot $installations[$key].path)"
 }
 Write-Host ""
 
@@ -355,10 +511,11 @@ Write-Verbose "wow.json destination: $configPath"
 $config = @{
     wowRoot             = $wowRoot
     installations       = $installations
-    azureSubscription   = "4js"
+    azureSubscription   = $currentSub
     azureResourceGroup  = "rg-wow-profile"
-    azureStorageAccount = "stwowprofilewus3"
+    azureStorageAccount = $storageAccountName
     azureContainer      = "wow-config"
+    azureLocation       = "westus3"
     excludeFiles        = @("Config.wtf")
 }
 
@@ -368,85 +525,26 @@ Write-Verbose "wow.json contents:"
 Write-Verbose (Get-Content $configPath -Raw)
 Write-Host ""
 
-# ── Step 5: Verify Azure CLI and authentication ─────────────────────────────
+# ── Step 8: Verify Azure storage ─────────────────────────────────────────────
 
-Write-Host "Verifying Azure CLI..." -ForegroundColor Cyan
+Write-Host "Verifying Azure storage..." -ForegroundColor Cyan
 
-if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
-    Write-Host "  ⚠ Azure CLI not installed" -ForegroundColor Yellow
-    Write-Host ""
-    if ($IsWindows -or $env:OS -match 'Windows') {
-        Write-Host "  Install with: winget install Microsoft.AzureCLI" -ForegroundColor White
-    } elseif ($IsMacOS) {
-        Write-Host "  Install with: brew install azure-cli" -ForegroundColor White
-    } else {
-        Write-Host "  Install with: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash" -ForegroundColor White
-    }
-    Write-Host ""
-    Write-Host "  After installing, run this setup again." -ForegroundColor White
-    Write-Host ""
-    Write-Host "========================================" -ForegroundColor Yellow
-    Write-Host "Setup Partially Complete" -ForegroundColor Yellow
-    Write-Host "========================================" -ForegroundColor Yellow
-    Write-Host ""
-    Write-Host "Scripts and configuration are installed." -ForegroundColor White
-    Write-Host "Install Azure CLI, then run Setup.ps1 again to finish." -ForegroundColor White
-    Write-Host ""
-    exit 0
-}
-
-$azPath = (Get-Command az).Source
-Write-Host "  ✓ Azure CLI found: $azPath" -ForegroundColor Green
-Write-Verbose "Azure CLI path: $azPath"
-
-Write-Host "Verifying Azure authentication..." -ForegroundColor Cyan
-
-$azAccount = az account show --output json 2>&1
+az account set --subscription $currentSub 2>&1 | Out-Null
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "  ⚠ Not logged into Azure" -ForegroundColor Yellow
-    Write-Host ""
-    Write-Host "  Please run these commands, then run Setup.ps1 again:" -ForegroundColor White
-    Write-Host "    az login" -ForegroundColor Yellow
-    Write-Host "    az account set --subscription $($config.azureSubscription)" -ForegroundColor Yellow
-    Write-Host ""
-    Write-Host "========================================" -ForegroundColor Yellow
-    Write-Host "Setup Partially Complete" -ForegroundColor Yellow
-    Write-Host "========================================" -ForegroundColor Yellow
-    Write-Host ""
-    Write-Host "Scripts and configuration are installed." -ForegroundColor White
-    Write-Host "Log into Azure, then run Setup.ps1 again to finish." -ForegroundColor White
-    Write-Host ""
+    Write-Host "  ⚠ Failed to set subscription: $currentSub" -ForegroundColor Yellow
     exit 0
 }
-Write-Host "  ✓ Logged into Azure" -ForegroundColor Green
-Write-Verbose "Azure account: $azAccount"
 
-az account set --subscription $config.azureSubscription 2>&1 | Out-Null
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "  ⚠ Failed to set subscription: $($config.azureSubscription)" -ForegroundColor Yellow
-    Write-Host "  Run: az account set --subscription $($config.azureSubscription)" -ForegroundColor White
-    Write-Host ""
-    Write-Host "========================================" -ForegroundColor Yellow
-    Write-Host "Setup Partially Complete" -ForegroundColor Yellow
-    Write-Host "========================================" -ForegroundColor Yellow
-    Write-Host ""
-    exit 0
-}
-Write-Host "  ✓ Subscription set: $($config.azureSubscription)" -ForegroundColor Green
-Write-Verbose "Azure subscription: $($config.azureSubscription)"
-
-# Verify storage account exists
 $storageCheck = az storage account show `
     --name $config.azureStorageAccount `
     --resource-group $config.azureResourceGroup `
     --output json 2>&1
 
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "  ⚠ Azure storage account '$($config.azureStorageAccount)' not found" -ForegroundColor Yellow
-    Write-Host "  Run Wow-Upload first to create Azure resources." -ForegroundColor White
+    Write-Host "  ℹ Storage account '$($config.azureStorageAccount)' does not exist yet" -ForegroundColor Yellow
+    Write-Host "  It will be created automatically when you run Wow-Upload." -ForegroundColor Gray
 } else {
     Write-Host "  ✓ Azure storage verified: $($config.azureStorageAccount)" -ForegroundColor Green
-    Write-Verbose "Storage account exists: $($config.azureStorageAccount)"
 }
 
 Write-Host ""

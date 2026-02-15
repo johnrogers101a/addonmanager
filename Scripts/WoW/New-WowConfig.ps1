@@ -99,14 +99,35 @@ while (-not $installations) {
     }
 }
 
+# Get Azure info for config
+$azSubscription = "unknown"
+$azEmail = "user"
+try {
+    $azAccountJson = az account show --output json 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        $azAccountObj = $azAccountJson | ConvertFrom-Json
+        $azSubscription = $azAccountObj.name
+        $azEmail = $azAccountObj.user.name
+    }
+} catch {}
+
+# Derive storage account name from email
+$username = ($azEmail -split '@')[0] -replace '[^a-z0-9]', ''
+$maxUsernameLen = 15
+if ($username.Length -gt $maxUsernameLen) {
+    $username = $username.Substring(0, $maxUsernameLen)
+}
+$storageAccountName = "st${username}wowwus3"
+
 # Build configuration object
 $config = @{
     wowRoot              = $wowRoot
     installations        = $installations
-    azureSubscription    = "4js"
+    azureSubscription    = $azSubscription
     azureResourceGroup   = "rg-wow-profile"
-    azureStorageAccount  = "stwowprofilewus3"
+    azureStorageAccount  = $storageAccountName
     azureContainer       = "wow-config"
+    azureLocation        = "westus3"
     excludeFiles         = @("Config.wtf")
 }
 
