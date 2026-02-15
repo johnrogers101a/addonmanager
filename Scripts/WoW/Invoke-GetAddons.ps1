@@ -238,77 +238,76 @@ foreach ($installKey in $installationsToProcess) {
         # Get latest release info
         Write-Verbose "  Fetching latest release for $owner/$repo..."
         $releaseJson = gh release view --repo "$owner/$repo" --json tagName,assets 2>&1
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host "  ✗ $addonName - no releases found for $owner/$repo" -ForegroundColor Red
-            $failed++
-            continue
+        $hasRelease = ($LASTEXITCODE -eq 0)
+        $useClone = $false
+
+        if ($hasRelease) {
+            $release = $releaseJson | ConvertFrom-Json
+            $tag = $release.tagName
+
+            # Find matching asset, respecting exclude patterns
+            $assets = $release.assets | Where-Object { $_.name -like $assetPattern }
+            foreach ($exclude in $excludePatterns) {
+                $assets = $assets | Where-Object { $_.name -notlike $exclude }
+            }
+            $asset = $assets | Select-Object -First 1
+
+            if (-not $asset) {
+                Write-Verbose "  No matching zip asset in release $tag, falling back to clone"
+                $useClone = $true
+            }
+        } else {
+            Write-Verbose "  No releases found, falling back to clone"
+            $useClone = $true
         }
-
-        $release = $releaseJson | ConvertFrom-Json
-        $tag = $release.tagName
-
-        # Find matching asset, respecting exclude patterns
-        $assets = $release.assets | Where-Object { $_.name -like $assetPattern }
-        foreach ($exclude in $excludePatterns) {
-            $assets = $assets | Where-Object { $_.name -notlike $exclude }
-        }
-        $asset = $assets | Select-Object -First 1
-
-        if (-not $asset) {
-            Write-Host "  ✗ $addonName - no matching zip asset in release $tag" -ForegroundColor Red
-            $failed++
-            continue
-        }
-
-        Write-Verbose "  Downloading: $($asset.name) ($tag)"
 
         # Download to temp directory
         $tempDir = Join-Path ([IO.Path]::GetTempPath()) "wow-addon-$(Get-Random)"
         New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
 
         try {
-            gh release download $tag --repo "$owner/$repo" --pattern $asset.name --dir $tempDir 2>&1 | Out-Null
-            if ($LASTEXITCODE -ne 0) {
-                Write-Host "  ✗ $addonName - download failed" -ForegroundColor Red
-                $failed++
-                continue
-            }
+            if (-not $useClone) {
+                # ── Release download path ────────────────────────────────────
+                Write-Verbose "  Downloading release: $($asset.name) ($tag)"
 
-            $zipFile = Join-Path $tempDir $asset.name
-            if (-not (Test-Path $zipFile)) {
-                Write-Host "  ✗ $addonName - downloaded file not found" -ForegroundColor Red
-                $failed++
-                continue
-            }
-
-            # Extract zip
-            $extractDir = Join-Path $tempDir "extract"
-            [System.IO.Compression.ZipFile]::ExtractToDirectory($zipFile, $extractDir)
-
-            # Find the addon folder in the extracted contents
-            # Most zips have a top-level folder matching the addon name
-            $extractedFolders = Get-ChildItem -Path $extractDir -Directory
-
-            if (-not $extractedFolders) {
-                Write-Host "  ✗ $addonName - zip contains no folders" -ForegroundColor Red
-                $failed++
-                continue
-            }
-
-            # Look for the specific installPath folder, or use all top-level folders
-            $targetFolder = $extractedFolders | Where-Object { $_.Name -eq $installFolder }
-
-            if ($targetFolder) {
-                # Exact match - install just that folder
-                if (Test-Path $addonDestPath) {
-                    Remove-Item -Path $addonDestPath -Recurse -Force
+                gh release download $tag --repo "$owner/$repo" --pattern $asset.name --dir $tempDir 2>&1 | Out-Null
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "  ✗ $addonName - release download failed" -ForegroundColor Red
+                    $failed++
+                    continue
                 }
-                Copy-Item -Path $targetFolder.FullName -Destination $addonDestPath -Recurse -Force
-                Write-Host "  ✓ $addonName ($tag)" -ForegroundColor Green
-                $installed++
-            } else {
-                # No exact match - if there's exactly one folder, use it
-                if ($extractedFolders.Count -eq 1) {
+
+                $zipFile = Join-Path $tempDir $asset.name
+                if (-not (Test-Path $zipFile)) {
+                    Write-Host "  ✗ $addonName - downloaded file not found" -ForegroundColor Red
+                    $failed++
+                    continue
+                }
+
+                # Extract zip
+                $extractDir = Join-Path $tempDir "extract"
+                [System.IO.Compression.ZipFile]::ExtractToDirectory($zipFile, $extractDir)
+
+                # Find the addon folder in the extracted contents
+                $extractedFolders = Get-ChildItem -Path $extractDir -Directory
+
+                if (-not $extractedFolders) {
+                    Write-Host "  ✗ $addonName - zip contains no folders" -ForegroundColor Red
+                    $failed++
+                    continue
+                }
+
+                # Look for the specific installPath folder, or use all top-level folders
+                $targetFolder = $extractedFolders | Where-Object { $_.Name -eq $installFolder }
+
+                if ($targetFolder) {
+                    if (Test-Path $addonDestPath) {
+                        Remove-Item -Path $addonDestPath -Recurse -Force
+                    }
+                    Copy-Item -Path $targetFolder.FullName -Destination $addonDestPath -Recurse -Force
+                    Write-Host "  ✓ $addonName ($tag)" -ForegroundColor Green
+                    $installed++
+                } elseif ($extractedFolders.Count -eq 1) {
                     if (Test-Path $addonDestPath) {
                         Remove-Item -Path $addonDestPath -Recurse -Force
                     }
@@ -316,11 +315,55 @@ foreach ($installKey in $installationsToProcess) {
                     Write-Host "  ✓ $addonName ($tag) [from $($extractedFolders[0].Name)]" -ForegroundColor Green
                     $installed++
                 } else {
-                    # Multiple folders, none matching - install all of them (multi-addon package)
                     $folderNames = ($extractedFolders | ForEach-Object { $_.Name }) -join ', '
                     Write-Host "  ⚠ $addonName - expected folder '$installFolder' not found in zip (contains: $folderNames)" -ForegroundColor Yellow
                     $warnings++
                 }
+            } else {
+                # ── Clone fallback path ──────────────────────────────────────
+                $branch = $addonInfo.github.branch
+                if (-not $branch) { $branch = "main" }
+
+                Write-Host "  ℹ $addonName - no release, cloning $owner/$repo ($branch)..." -ForegroundColor Cyan
+
+                $cloneDir = Join-Path $tempDir "clone"
+                gh repo clone "$owner/$repo" $cloneDir -- --depth 1 --branch $branch --quiet 2>&1 | Out-Null
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "  ✗ $addonName - clone failed" -ForegroundColor Red
+                    $failed++
+                    continue
+                }
+
+                # Check if the addon .toc is at the repo root or in a subfolder
+                $rootToc = Get-ChildItem -Path $cloneDir -Filter "*.toc" -File -ErrorAction SilentlyContinue | Select-Object -First 1
+                $subFolder = Join-Path $cloneDir $installFolder
+
+                if ((Test-Path $subFolder) -and (Get-ChildItem -Path $subFolder -Filter "*.toc" -File -ErrorAction SilentlyContinue)) {
+                    # Addon is in a subfolder matching installPath
+                    if (Test-Path $addonDestPath) {
+                        Remove-Item -Path $addonDestPath -Recurse -Force
+                    }
+                    Copy-Item -Path $subFolder -Destination $addonDestPath -Recurse -Force
+                } elseif ($rootToc) {
+                    # Addon code is at repo root — copy entire repo as the addon folder
+                    if (Test-Path $addonDestPath) {
+                        Remove-Item -Path $addonDestPath -Recurse -Force
+                    }
+                    Copy-Item -Path $cloneDir -Destination $addonDestPath -Recurse -Force
+                } else {
+                    Write-Host "  ✗ $addonName - no .toc file found in cloned repo" -ForegroundColor Red
+                    $failed++
+                    continue
+                }
+
+                # Remove .git directory from installed addon
+                $gitDir = Join-Path $addonDestPath ".git"
+                if (Test-Path $gitDir) {
+                    Remove-Item -Path $gitDir -Recurse -Force -ErrorAction SilentlyContinue
+                }
+
+                Write-Host "  ✓ $addonName (cloned $branch)" -ForegroundColor Green
+                $installed++
             }
         }
         catch {
