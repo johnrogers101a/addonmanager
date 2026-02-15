@@ -100,11 +100,19 @@ if ($allRepos.Count -lt $Limit) {
                 if (-not $hasToc) { continue }
 
                 # It's a WoW addon — get full repo info
-                $repoInfo = gh repo view $fullName --json fullName,description,stargazersCount,updatedAt,url 2>&1
+                $repoInfo = gh repo view $fullName --json nameWithOwner,description,stargazerCount,updatedAt,url 2>&1
                 if ($LASTEXITCODE -eq 0) {
                     try {
                         $repoData = $repoInfo | ConvertFrom-Json
-                        $allRepos[$repoData.fullName] = $repoData
+                        # Normalize field names to match gh search repos output
+                        $normalized = [PSCustomObject]@{
+                            fullName        = $repoData.nameWithOwner
+                            description     = $repoData.description
+                            stargazersCount = $repoData.stargazerCount
+                            updatedAt       = $repoData.updatedAt
+                            url             = $repoData.url
+                        }
+                        $allRepos[$normalized.fullName] = $normalized
                         Write-Verbose "  ✓ $fullName is a WoW addon"
                     } catch {}
                 }
