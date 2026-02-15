@@ -259,21 +259,7 @@ foreach ($key in $installationsToSync) {
         Write-Host "    ✓ Restored" -ForegroundColor Green
     }
     
-    # Generate addons.json
-    Write-Host "  Generating addon inventory..." -ForegroundColor Gray
-    $updateAddonsScript = Join-Path $PSScriptRoot "Update-AddonsJson.ps1"
-    
-    try {
-        $addonCount = & $updateAddonsScript `
-            -WowRoot $config.wowRoot `
-            -Installation $installInfo.path `
-            -InstallationKey $key
-        
-        Write-Host "    ✓ Created addons.json with $addonCount addons" -ForegroundColor Green
-    }
-    catch {
-        Write-Host "    ⚠ Failed to generate addons.json: $($_.Exception.Message)" -ForegroundColor Yellow
-    }
+    Write-Host ""
     
     Write-Host ""
 }
