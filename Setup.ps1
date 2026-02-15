@@ -84,6 +84,18 @@ foreach ($file in $scriptFiles) {
         exit 1
     }
 }
+
+# Copy addon-repos.json to profile directory
+$addonReposSrc = Join-Path $PSScriptRoot "addon-repos.json"
+$addonReposDest = Join-Path $profileDir "addon-repos.json"
+if (Test-Path $addonReposSrc) {
+    Copy-Item -Path $addonReposSrc -Destination $addonReposDest -Force
+    Write-Host "  ✓ addon-repos.json" -ForegroundColor Green
+    Write-Verbose "Copied addon-repos.json to: $addonReposDest"
+} else {
+    Write-Host "  ⚠ addon-repos.json not found in repo (Get-Addons will not work)" -ForegroundColor Yellow
+}
+
 Write-Host ""
 
 # ── Step 3: Register commands in Initialize-PowerShellProfile.ps1 ────────────
@@ -100,9 +112,14 @@ if (-not (Test-Path $initScript)) {
 } else {
     $initContent = Get-Content -Path $initScript -Raw
 
-    if ($initContent -match 'function Wow-Download') {
+    if ($initContent -match 'function Wow-Download' -and $initContent -match 'function Get-Addons') {
         Write-Host "  ℹ Commands already registered" -ForegroundColor Yellow
     } else {
+        # Remove existing WoW block if present (to re-register with new commands)
+        if ($initContent -match '(?ms)# WoW addon management commands.*?(?=\n# Display loaded custom commands|\z)') {
+            $initContent = $initContent -replace '(?ms)\r?\n# WoW addon management commands.*?(?=\r?\n# Display loaded custom commands|\z)', ''
+        }
+
         $wowBlock = @'
 
 # WoW addon management commands
@@ -140,6 +157,11 @@ function Update-AddonsJson {
     $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Update-AddonsJson.ps1"
     & $scriptPath @args
 }
+
+function Get-Addons {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-GetAddons.ps1"
+    & $scriptPath @args
+}
 '@
         if ($initContent -match '(?m)^# Display loaded custom commands') {
             $initContent = $initContent -replace '(?m)^# Display loaded custom commands', "$wowBlock`n`n# Display loaded custom commands"
@@ -155,7 +177,8 @@ function Update-AddonsJson {
 # Create Show-Commands wrapper scripts
 foreach ($cmd in @(
     @{ Name = "Wow-Download"; Synopsis = "Sync WTF configuration from Azure"; Script = "Invoke-WowDownload.ps1" },
-    @{ Name = "Wow-Upload"; Synopsis = "Upload WTF configuration to Azure"; Script = "Invoke-WowUpload.ps1" }
+    @{ Name = "Wow-Upload"; Synopsis = "Upload WTF configuration to Azure"; Script = "Invoke-WowUpload.ps1" },
+    @{ Name = "Get-Addons"; Synopsis = "Download and install WoW addons from GitHub"; Script = "Invoke-GetAddons.ps1" }
 )) {
     $wrapper = @"
 #!/usr/bin/env pwsh
@@ -436,4 +459,6 @@ Write-Host "  Wow-Download    " -NoNewline -ForegroundColor Yellow
 Write-Host "- Sync WTF configuration from Azure" -ForegroundColor Gray
 Write-Host "  Wow-Upload      " -NoNewline -ForegroundColor Yellow
 Write-Host "- Upload WTF configuration to Azure" -ForegroundColor Gray
+Write-Host "  Get-Addons      " -NoNewline -ForegroundColor Yellow
+Write-Host "- Download and install addons from GitHub" -ForegroundColor Gray
 Write-Host ""
