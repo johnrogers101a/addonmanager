@@ -51,13 +51,14 @@ Write-Host "Searching GitHub for WoW addons: '$Query'..." -ForegroundColor Cyan
 Write-Host ""
 
 # Run multiple searches from specific to broad, combine unique results
-$allRepos = @{}
+$allRepos = [ordered]@{}
+
+# Phase 1: Search repos by keyword
 $searches = @(
     "$Query topic:world-of-warcraft",
     "$Query topic:wow-addon",
     "$Query topic:wow",
     "$Query warcraft addon",
-    "$Query warcraft",
     "$Query wow addon",
     "$Query"
 )
@@ -72,6 +73,40 @@ foreach ($searchQuery in $searches) {
             foreach ($r in $parsed) {
                 if (-not $allRepos.ContainsKey($r.fullName)) {
                     $allRepos[$r.fullName] = $r
+                }
+            }
+        } catch {}
+    }
+}
+
+# Phase 2: Search as GitHub user/org — list their repos and find WoW addons
+if ($allRepos.Count -lt $Limit) {
+    Write-Host "Checking if '$Query' is a GitHub user..." -ForegroundColor Gray
+    $userRepos = gh repo list $Query --limit 50 --json name,description,url 2>&1
+    if ($LASTEXITCODE -eq 0 -and $userRepos) {
+        try {
+            $parsed = $userRepos | ConvertFrom-Json
+            foreach ($r in $parsed) {
+                if ($allRepos.Count -ge $Limit) { break }
+                $fullName = "$Query/$($r.name)"
+                if ($allRepos.ContainsKey($fullName)) { continue }
+
+                # Validate it's a WoW addon by checking for .toc files
+                Write-Verbose "  Checking $fullName for .toc files..."
+                $tocCheck = gh api "repos/$fullName/git/trees/HEAD?recursive=1" --jq '.tree[].path' 2>&1
+                if ($LASTEXITCODE -ne 0) { continue }
+
+                $hasToc = $tocCheck | Where-Object { $_ -match '\.toc$' } | Select-Object -First 1
+                if (-not $hasToc) { continue }
+
+                # It's a WoW addon — get full repo info
+                $repoInfo = gh repo view $fullName --json fullName,description,stargazersCount,updatedAt,url 2>&1
+                if ($LASTEXITCODE -eq 0) {
+                    try {
+                        $repoData = $repoInfo | ConvertFrom-Json
+                        $allRepos[$repoData.fullName] = $repoData
+                        Write-Verbose "  ✓ $fullName is a WoW addon"
+                    } catch {}
                 }
             }
         } catch {}
