@@ -380,6 +380,63 @@ foreach ($installKey in $installationsToProcess) {
     Write-Host ""
     Write-Host "  Results: $installed installed, $skipped already present, $warnings warnings, $failed failed" -ForegroundColor Cyan
     Write-Host ""
+
+    # ── Dependency check ─────────────────────────────────────────────────────
+    # Scan all installed addons for ## Dependencies and remove any whose
+    # hard dependencies are not present in the AddOns folder.
+
+    Write-Host "Checking dependencies..." -ForegroundColor Cyan
+
+    $removed = 0
+    $checked = 0
+    $installedAddons = Get-ChildItem -Path $addonsPath -Directory -ErrorAction SilentlyContinue
+
+    if ($installedAddons) {
+        # Build set of installed addon folder names
+        $installedSet = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]($installedAddons | ForEach-Object { $_.Name }),
+            [System.StringComparer]::OrdinalIgnoreCase
+        )
+
+        # Keep removing until no more broken deps (cascading removal)
+        $removedThisPass = $true
+        while ($removedThisPass) {
+            $removedThisPass = $false
+
+            foreach ($addonDir in @(Get-ChildItem -Path $addonsPath -Directory -ErrorAction SilentlyContinue)) {
+                if (-not $installedSet.Contains($addonDir.Name)) { continue }
+
+                $tocFile = Join-Path $addonDir.FullName "$($addonDir.Name).toc"
+                if (-not (Test-Path $tocFile)) { continue }
+
+                $checked++
+                $depLine = Get-Content $tocFile -Encoding UTF8 -ErrorAction SilentlyContinue |
+                    Where-Object { $_ -match '##\s*Dependencies\s*:\s*(.+)' }
+
+                if (-not $depLine) { continue }
+                if ($depLine -notmatch '##\s*Dependencies\s*:\s*(.+)') { continue }
+
+                $deps = $Matches[1] -split '\s*,\s*' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+                $missingDeps = @($deps | Where-Object { -not $installedSet.Contains($_) })
+
+                if ($missingDeps.Count -gt 0) {
+                    $missingList = $missingDeps -join ', '
+                    Write-Host "  ✗ $($addonDir.Name) - missing dependencies: $missingList (removing)" -ForegroundColor Red
+                    Remove-Item -Path $addonDir.FullName -Recurse -Force -ErrorAction SilentlyContinue
+                    $installedSet.Remove($addonDir.Name) | Out-Null
+                    $removed++
+                    $removedThisPass = $true
+                }
+            }
+        }
+    }
+
+    if ($removed -gt 0) {
+        Write-Host "  Removed $removed addon(s) with missing dependencies" -ForegroundColor Yellow
+    } else {
+        Write-Host "  ✓ All dependencies satisfied" -ForegroundColor Green
+    }
+    Write-Host ""
 }
 
 Write-Host "========================================" -ForegroundColor Green
