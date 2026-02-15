@@ -211,6 +211,7 @@ foreach ($key in $installationsToSync) {
             --source $config.azureContainer `
             --destination $tempDownloadDir `
             --pattern "$blobPrefix/*" `
+            --auth-mode login `
             --output none
         Write-Host ""
         
