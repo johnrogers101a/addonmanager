@@ -50,26 +50,35 @@ Write-Host ""
 Write-Host "Searching GitHub for WoW addons: '$Query'..." -ForegroundColor Cyan
 Write-Host ""
 
-# Search GitHub for WoW-related repos matching the query
-$searchQuery = "$Query world of warcraft addon"
-$results = gh search repos $searchQuery --limit $Limit --json fullName,description,stargazersCount,updatedAt,url 2>&1
+# Run multiple searches from specific to broad, combine unique results
+$allRepos = @{}
+$searches = @(
+    "$Query topic:world-of-warcraft",
+    "$Query topic:wow-addon",
+    "$Query topic:wow",
+    "$Query warcraft addon",
+    "$Query warcraft",
+    "$Query wow addon",
+    "$Query"
+)
 
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Error: Search failed" -ForegroundColor Red
-    Write-Host $results -ForegroundColor Gray
-    return
-}
-
-$repos = $results | ConvertFrom-Json
-
-if (-not $repos -or $repos.Count -eq 0) {
-    # Try broader search without "addon"
-    $searchQuery = "$Query warcraft"
-    $results = gh search repos $searchQuery --limit $Limit --json fullName,description,stargazersCount,updatedAt,url 2>&1
-    if ($LASTEXITCODE -eq 0) {
-        $repos = $results | ConvertFrom-Json
+foreach ($searchQuery in $searches) {
+    if ($allRepos.Count -ge $Limit) { break }
+    $remaining = $Limit - $allRepos.Count
+    $results = gh search repos $searchQuery --limit $remaining --json fullName,description,stargazersCount,updatedAt,url 2>&1
+    if ($LASTEXITCODE -eq 0 -and $results) {
+        try {
+            $parsed = $results | ConvertFrom-Json
+            foreach ($r in $parsed) {
+                if (-not $allRepos.ContainsKey($r.fullName)) {
+                    $allRepos[$r.fullName] = $r
+                }
+            }
+        } catch {}
     }
 }
+
+$repos = @($allRepos.Values)
 
 if (-not $repos -or $repos.Count -eq 0) {
     Write-Host "No results found for '$Query'" -ForegroundColor Yellow
