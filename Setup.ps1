@@ -112,7 +112,7 @@ if (-not (Test-Path $initScript)) {
 } else {
     $initContent = Get-Content -Path $initScript -Raw
 
-    if ($initContent -match 'function Wow-Download' -and $initContent -match 'function Get-Addons') {
+    if ($initContent -match 'function Wow-Download' -and $initContent -match 'function Get-Addons' -and $initContent -match 'function Wow-Purge') {
         Write-Host "  ℹ Commands already registered" -ForegroundColor Yellow
     } else {
         # Remove existing WoW block if present (to re-register with new commands)
@@ -162,6 +162,11 @@ function Get-Addons {
     $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-GetAddons.ps1"
     & $scriptPath @args
 }
+
+function Wow-Purge {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-WowPurge.ps1"
+    & $scriptPath @args
+}
 '@
         if ($initContent -match '(?m)^# Display loaded custom commands') {
             $initContent = $initContent -replace '(?m)^# Display loaded custom commands', "$wowBlock`n`n# Display loaded custom commands"
@@ -178,7 +183,8 @@ function Get-Addons {
 foreach ($cmd in @(
     @{ Name = "Wow-Download"; Synopsis = "Sync WTF configuration from Azure"; Script = "Invoke-WowDownload.ps1" },
     @{ Name = "Wow-Upload"; Synopsis = "Upload WTF configuration to Azure"; Script = "Invoke-WowUpload.ps1" },
-    @{ Name = "Get-Addons"; Synopsis = "Download and install WoW addons from GitHub"; Script = "Invoke-GetAddons.ps1" }
+    @{ Name = "Get-Addons"; Synopsis = "Download and install WoW addons from GitHub"; Script = "Invoke-GetAddons.ps1" },
+    @{ Name = "Wow-Purge"; Synopsis = "Delete Azure storage account and start fresh"; Script = "Invoke-WowPurge.ps1" }
 )) {
     $wrapper = @"
 #!/usr/bin/env pwsh
@@ -559,4 +565,6 @@ Write-Host "  Wow-Upload      " -NoNewline -ForegroundColor Yellow
 Write-Host "- Upload WTF configuration to Azure" -ForegroundColor Gray
 Write-Host "  Get-Addons      " -NoNewline -ForegroundColor Yellow
 Write-Host "- Download and install addons from GitHub" -ForegroundColor Gray
+Write-Host "  Wow-Purge       " -NoNewline -ForegroundColor Yellow
+Write-Host "- Delete Azure storage account and start fresh" -ForegroundColor Gray
 Write-Host ""
