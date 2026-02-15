@@ -10,7 +10,7 @@ Synchronize World of Warcraft addon configurations across multiple machines usin
 - 📦 **Addon Inventory** - Automatic addon.json generation with metadata from .toc files
 - ☁️ **Azure Storage** - Centralized configuration storage with Azure Blob Storage
 - 🔧 **Idempotent** - Safe to run multiple times
-- 💻 **Cross-Platform** - Windows and macOS support
+- 💻 **Cross-Platform** - Windows, macOS, and Linux support (CachyOS, Bazzite, etc.)
 
 ## Quick Start
 
@@ -70,6 +70,7 @@ Wow-Upload
 Located in PowerShell profile directory:
 - Windows: `$HOME\Documents\PowerShell\wow.json`
 - macOS: `~/.config/powershell/wow.json`
+- Linux: `~/.config/powershell/wow.json`
 
 Example:
 ```json
@@ -183,6 +184,14 @@ addonmanager/
 - World of Warcraft installation
 - Azure subscription (for publishing only)
 
+**Linux (CachyOS, Bazzite, etc.):**
+```bash
+# Lutris
+# Default: ~/Games/world-of-warcraft
+# Steam Proton
+# Default: ~/.steam/steam/steamapps/compatdata/[APPID]/pfx/drive_c/Program Files (x86)/World of Warcraft
+```
+
 ### Installing Azure CLI
 
 **Windows:**
@@ -193,6 +202,11 @@ winget install Microsoft.AzureCLI
 **macOS:**
 ```bash
 brew install azure-cli
+```
+
+**Linux:**
+```bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 ```
 
 ## Troubleshooting

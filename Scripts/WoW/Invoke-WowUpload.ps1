@@ -45,7 +45,7 @@ if (-not (Test-Path $profileDir)) {
 }
 Write-Verbose "  ✓ exists"
 
-$scriptsDir = Join-Path $profileDir "Scripts/WoW"
+$scriptsDir = Join-Path $profileDir "Scripts" "WoW"
 Write-Verbose "Scripts directory: $scriptsDir"
 
 if (-not (Test-Path $scriptsDir)) {
@@ -74,9 +74,8 @@ if (-not (Test-Path $newConfigScript)) {
 }
 Write-Verbose "  ✓ exists"
 
-# Resolve temp directory (macOS uses TMPDIR, not TEMP)
-$tempBase = if ($env:TMPDIR) { $env:TMPDIR } elseif ($env:TEMP) { $env:TEMP } else { "/tmp" }
-$tempBase = $tempBase.TrimEnd('/')
+# Resolve temp directory (cross-platform)
+$tempBase = [IO.Path]::GetTempPath().TrimEnd([IO.Path]::DirectorySeparatorChar)
 Write-Verbose "Temp base directory: $tempBase"
 
 if (-not (Test-Path $tempBase)) {

@@ -4,18 +4,14 @@
     Initializes WoW management functions in PowerShell profile.
 
 .DESCRIPTION
-    Defines wrapper functions for WoW addon and configuration management.
-    Functions call corresponding scripts in the same directory.
-    Pattern follows powershell-config Initialize-PowerShellProfile.ps1.
+    This script is no longer used for profile initialization.
+    WoW commands are registered directly in Initialize-PowerShellProfile.ps1
+    by Setup.ps1 using the same function wrapper pattern as other profile commands.
     
-    Silent initialization - does not print output (integrated with Show-Commands).
-
-.EXAMPLE
-    . "C:\Path\To\Scripts\WoW\Initialize-WowProfile.ps1"
-    Loads WoW management functions into current session.
+    This script is retained for reference only.
 
 .OUTPUTS
-    None (defines functions in session scope)
+    None
 #>
 
 [CmdletBinding()]
@@ -26,7 +22,7 @@ $ErrorActionPreference = 'Stop'
 # Get script directory for function calls
 # When dot-sourced, $PSScriptRoot is unreliable, so compute from profile directory
 $profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
-$script:WowScriptRoot = Join-Path $profileDir "Scripts/WoW"
+$script:WowScriptRoot = Join-Path $profileDir "Scripts" "WoW"
 
 # Validate script directory exists
 if (-not (Test-Path $script:WowScriptRoot)) {

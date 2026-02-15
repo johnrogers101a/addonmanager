@@ -54,7 +54,7 @@ $addons = @()
 
 # Resolve scripts directory from profile
 $profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
-$scriptsDir = Join-Path $profileDir "Scripts/WoW"
+$scriptsDir = Join-Path $profileDir "Scripts" "WoW"
 $tocScript = Join-Path $scriptsDir "Get-TocMetadata.ps1"
 Write-Verbose "  TOC script: $tocScript"
 

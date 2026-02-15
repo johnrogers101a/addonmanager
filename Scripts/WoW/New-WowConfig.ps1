@@ -54,8 +54,11 @@ while (-not $installations) {
     
     $defaultWowRoot = if ($IsWindows -or $env:OS -match 'Windows') {
         "C:\Program Files (x86)\World of Warcraft"
-    } else {
+    } elseif ($IsMacOS) {
         "/Applications/World of Warcraft"
+    } else {
+        # Linux: common Lutris path
+        Join-Path $HOME "Games" "world-of-warcraft"
     }
     
     Write-Host "  Default: $defaultWowRoot" -ForegroundColor Gray

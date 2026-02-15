@@ -42,7 +42,7 @@ Write-Verbose "Generating addon inventory for $InstallationKey..."
 
 # Resolve scripts directory from profile
 $profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
-$scriptsDir = Join-Path $profileDir "Scripts/WoW"
+$scriptsDir = Join-Path $profileDir "Scripts" "WoW"
 Write-Verbose "  Scripts directory: $scriptsDir"
 
 $getAddonsScript = Join-Path $scriptsDir "Get-InstalledAddons.ps1"

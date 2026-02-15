@@ -4,13 +4,15 @@
     Installs WoW addon management commands to PowerShell profile.
 
 .DESCRIPTION
-    Copies WoW management scripts to PowerShell profile directory and adds
-    initialization to profile. Can be run locally or directly from URL.
+    Copies WoW management scripts to PowerShell profile directory and registers
+    WoW commands in Initialize-PowerShellProfile.ps1 using the same function
+    wrapper pattern as existing profile commands.
     
     After installation, the following commands are available:
     - Wow-Download (Invoke-WowDownload) - Sync WTF from Azure
     - Wow-Upload (Invoke-WowUpload) - Upload WTF to Azure
     
+    Cross-platform: works on Windows, macOS, and Linux.
     This script is idempotent - safe to run multiple times.
 
 .EXAMPLE
@@ -84,37 +86,74 @@ foreach ($file in $scriptFiles) {
 
 Write-Host ""
 
-# Add initialization to profile if not already present
-$profilePath = $global:PROFILE.CurrentUserAllHosts
+# Register WoW commands in Initialize-PowerShellProfile.ps1
+Write-Host "Registering WoW commands..." -ForegroundColor Cyan
 
-Write-Host "Configuring PowerShell profile..." -ForegroundColor Cyan
+$initScript = Join-Path $profileDir "Scripts" "Profile" "Initialize-PowerShellProfile.ps1"
 
-# Create profile file if it doesn't exist
-if (-not (Test-Path $profilePath)) {
-    Write-Host "  Creating profile file..." -ForegroundColor Gray
-    New-Item -ItemType File -Path $profilePath -Force | Out-Null
-}
-
-# Read current profile content
-$profileContent = Get-Content -Path $profilePath -Raw -ErrorAction SilentlyContinue
-
-# Check if WoW initialization is already present
-if ($profileContent -match 'Initialize-WowProfile\.ps1') {
-    Write-Host "  ℹ WoW initialization already present in profile" -ForegroundColor Yellow
+if (-not (Test-Path $initScript)) {
+    Write-Host "  ⚠ Initialize-PowerShellProfile.ps1 not found at: $initScript" -ForegroundColor Yellow
+    Write-Host "  WoW scripts installed but commands not registered." -ForegroundColor Yellow
+    Write-Host "  You can call scripts directly from: $wowScriptsDir" -ForegroundColor Yellow
 } else {
-    Write-Host "  Adding WoW initialization to profile..." -ForegroundColor Gray
-    
-    $initBlock = @"
+    $initContent = Get-Content -Path $initScript -Raw
 
-# Initialize WoW addon management
-`$wowInitScript = Join-Path `$PSScriptRoot "Scripts/WoW/Initialize-WowProfile.ps1"
-if (Test-Path `$wowInitScript) {
-    . `$wowInitScript
+    if ($initContent -match 'Invoke-WowDownload') {
+        Write-Host "  ℹ WoW commands already registered" -ForegroundColor Yellow
+    } else {
+        # Append WoW command functions before Show-Commands call
+        $wowBlock = @'
+
+# WoW addon management commands
+function Invoke-WowDownload {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-WowDownload.ps1"
+    & $scriptPath @args
 }
-"@
-    
-    Add-Content -Path $profilePath -Value $initBlock -Encoding UTF8
-    Write-Host "  ✓ Profile updated" -ForegroundColor Green
+
+function Invoke-WowUpload {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-WowUpload.ps1"
+    & $scriptPath @args
+}
+
+function New-WowConfig {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "New-WowConfig.ps1"
+    & $scriptPath @args
+}
+
+function Get-WowConfig {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Get-WowConfig.ps1"
+    & $scriptPath @args
+}
+
+function Get-WowInstallations {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Get-WowInstallations.ps1"
+    & $scriptPath @args
+}
+
+function Get-InstalledAddons {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Get-InstalledAddons.ps1"
+    & $scriptPath @args
+}
+
+function Update-AddonsJson {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Update-AddonsJson.ps1"
+    & $scriptPath @args
+}
+
+Set-Alias -Name Wow-Download -Value Invoke-WowDownload
+Set-Alias -Name Wow-Upload -Value Invoke-WowUpload
+'@
+        # Insert before "# Display loaded custom commands" line
+        if ($initContent -match '(?m)^# Display loaded custom commands') {
+            $initContent = $initContent -replace '(?m)^# Display loaded custom commands', "$wowBlock`n`n# Display loaded custom commands"
+        } else {
+            # Fallback: append to end
+            $initContent += $wowBlock
+        }
+
+        Set-Content -Path $initScript -Value $initContent -Encoding UTF8 -NoNewline
+        Write-Host "  ✓ WoW commands registered in Initialize-PowerShellProfile.ps1" -ForegroundColor Green
+    }
 }
 
 # Create wrapper scripts in Scripts/Profile for Show-Commands discovery
@@ -139,7 +178,7 @@ $wowDownloadWrapper = @'
     Downloads and syncs WTF configuration from Azure Blob Storage.
 #>
 param()
-$wowScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/Invoke-WowDownload.ps1"
+$wowScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-WowDownload.ps1"
 & $wowScript @args
 '@
 
@@ -158,13 +197,27 @@ $wowUploadWrapper = @'
     Uploads WTF configuration to Azure Blob Storage.
 #>
 param()
-$wowScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW/Invoke-WowUpload.ps1"
+$wowScript = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-WowUpload.ps1"
 & $wowScript @args
 '@
 
 $wowUploadPath = Join-Path $profileScriptsDir "Invoke-WowUpload.ps1"
 $wowUploadWrapper | Set-Content -Path $wowUploadPath -Encoding UTF8
 Write-Host "  ✓ Invoke-WowUpload.ps1" -ForegroundColor Green
+
+# Clean up old dot-source init from profile.ps1 if present
+$profilePath = $global:PROFILE.CurrentUserAllHosts
+if (Test-Path $profilePath) {
+    $profileContent = Get-Content -Path $profilePath -Raw -ErrorAction SilentlyContinue
+    if ($profileContent -match 'Initialize-WowProfile\.ps1') {
+        Write-Host ""
+        Write-Host "Cleaning up old profile initialization..." -ForegroundColor Cyan
+        # Remove the old WoW init block from profile.ps1
+        $profileContent = $profileContent -replace '(?ms)\r?\n# Initialize WoW addon management\r?\n.*?Initialize-WowProfile\.ps1.*?\r?\n\}\r?\n?', ''
+        Set-Content -Path $profilePath -Value $profileContent.TrimEnd() -Encoding UTF8
+        Write-Host "  ✓ Removed old dot-source init from profile.ps1" -ForegroundColor Green
+    }
+}
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green

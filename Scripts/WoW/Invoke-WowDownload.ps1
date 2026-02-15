@@ -57,7 +57,7 @@ Write-Host ""
 Write-Host "Loading configuration..." -ForegroundColor Cyan
 
 $profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
-$configScript = Join-Path $profileDir "Scripts/WoW/Get-WowConfig.ps1"
+$configScript = Join-Path $profileDir "Scripts" "WoW" "Get-WowConfig.ps1"
 
 if (-not (Test-Path $configScript)) {
     Write-Host "Error: Get-WowConfig.ps1 not found at: $configScript" -ForegroundColor Red
@@ -73,7 +73,7 @@ catch {
     Write-Host "  ℹ wow.json not found, creating..." -ForegroundColor Yellow
     Write-Host ""
     
-    $newConfigScript = Join-Path $profileDir "Scripts/WoW/New-WowConfig.ps1"
+    $newConfigScript = Join-Path $profileDir "Scripts" "WoW" "New-WowConfig.ps1"
     
     if (-not (Test-Path $newConfigScript)) {
         Write-Host "Error: New-WowConfig.ps1 not found at: $newConfigScript" -ForegroundColor Red
@@ -179,7 +179,7 @@ foreach ($key in $installationsToSync) {
     $tempConfigPath = $null
     if (Test-Path $configWtfPath) {
         Write-Host "  Preserving Config.wtf..." -ForegroundColor Gray
-        $tempConfigPath = Join-Path $env:TEMP "Config.wtf.$key.$(Get-Date -Format 'yyyyMMddHHmmss')"
+        $tempConfigPath = Join-Path ([IO.Path]::GetTempPath()) "Config.wtf.$key.$(Get-Date -Format 'yyyyMMddHHmmss')"
         Copy-Item -Path $configWtfPath -Destination $tempConfigPath -Force
         Write-Host "    ✓ Saved to temp" -ForegroundColor Green
     }
@@ -187,7 +187,7 @@ foreach ($key in $installationsToSync) {
     # Clear WTF folder
     Write-Host "  Clearing WTF folder..." -ForegroundColor Gray
     if (Test-Path $wtfPath) {
-        Remove-Item -Path "$wtfPath\*" -Recurse -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path (Join-Path $wtfPath '*') -Recurse -Force -ErrorAction SilentlyContinue
     } else {
         New-Item -ItemType Directory -Path $wtfPath -Force | Out-Null
     }
