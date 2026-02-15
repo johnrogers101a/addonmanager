@@ -5,10 +5,11 @@
 
 .DESCRIPTION
     Searches GitHub repositories for World of Warcraft addons using the
-    GitHub CLI. Returns matching repos with descriptions and release info.
+    GitHub CLI. Uses progressive search: repo name, then owner/user lookup.
+    Validates results by checking for .toc files with retail Interface versions.
 
 .PARAMETER Query
-    Search terms (e.g. "damage meter", "quest tracker", "unit frames")
+    Search terms (e.g. "damage meter", "DanderBot", "bugsack")
 
 .PARAMETER Limit
     Maximum results to return (default: 10)
@@ -17,7 +18,10 @@
     Find-Addons "damage meter"
 
 .EXAMPLE
-    Find-Addons "quest tracker" -Limit 20
+    Find-Addons "DanderBot"
+
+.EXAMPLE
+    Find-Addons "bugsack" -Limit 20
 
 .NOTES
     Requires GitHub CLI (gh) and authentication.
@@ -34,7 +38,6 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-# Verify gh CLI
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
     Write-Host "Error: GitHub CLI (gh) not found" -ForegroundColor Red
     return
@@ -50,86 +53,112 @@ Write-Host ""
 Write-Host "Searching GitHub for WoW addons: '$Query'..." -ForegroundColor Cyan
 Write-Host ""
 
-# Run multiple searches from specific to broad, combine unique results
-$allRepos = [ordered]@{}
+# Collect unique candidates keyed by fullName
+$candidates = @{}
+$searchLimit = [Math]::Max($Limit * 3, 30) # fetch extra since we'll filter
 
-# Phase 1: Search repos by keyword
+# Build search queries: repo name first, then owner, then broader
 $searches = @(
-    "$Query topic:world-of-warcraft",
-    "$Query topic:wow-addon",
-    "$Query topic:wow",
-    "$Query warcraft addon",
-    "$Query wow addon",
-    "$Query"
+    @{ Args = $Query; Label = "Searching repos for '$Query'" }
 )
+if ($Query -notmatch '\s') {
+    $searches += @{ Args = "user:$Query"; Label = "Searching user '$Query' repos" }
+}
+$searches += @{ Args = "$Query addon"; Label = "Broadening search" }
 
-foreach ($searchQuery in $searches) {
-    if ($allRepos.Count -ge $Limit) { break }
-    $remaining = $Limit - $allRepos.Count
-    $results = gh search repos $searchQuery --limit $remaining --json fullName,description,stargazersCount,updatedAt,url 2>&1
-    if ($LASTEXITCODE -eq 0 -and $results) {
-        try {
-            $parsed = $results | ConvertFrom-Json
-            foreach ($r in $parsed) {
-                if (-not $allRepos.ContainsKey($r.fullName)) {
-                    $allRepos[$r.fullName] = $r
-                }
+foreach ($search in $searches) {
+    if ($candidates.Count -ge $searchLimit) { break }
+    Write-Host "  $($search.Label)..." -ForegroundColor Gray
+    $remaining = $searchLimit - $candidates.Count
+    $searchArgs = $search.Args
+    $results = $null
+    try {
+        $results = gh search repos $searchArgs --language lua --limit $remaining --json fullName,description,stargazersCount,updatedAt,url 2>&1
+    } catch {}
+    if ($LASTEXITCODE -ne 0 -or -not $results) { continue }
+    try {
+        $parsed = $results | ConvertFrom-Json
+        if (-not $parsed) { continue }
+        $count = 0
+        foreach ($r in $parsed) {
+            if (-not $candidates.ContainsKey($r.fullName)) {
+                $candidates[$r.fullName] = $r
+                $count++
             }
-        } catch {}
-    }
+        }
+        if ($count -gt 0) { Write-Host "    Found $count repos" -ForegroundColor DarkGray }
+    } catch {}
 }
 
-# Phase 2: Search as GitHub user/org — list their repos and find WoW addons
-if ($allRepos.Count -lt $Limit) {
-    Write-Host "Checking if '$Query' is a GitHub user..." -ForegroundColor Gray
-    $userRepos = gh repo list $Query --limit 50 --json name,description,url 2>&1
-    if ($LASTEXITCODE -eq 0 -and $userRepos) {
-        try {
-            $parsed = $userRepos | ConvertFrom-Json
-            foreach ($r in $parsed) {
-                if ($allRepos.Count -ge $Limit) { break }
-                $fullName = "$Query/$($r.name)"
-                if ($allRepos.ContainsKey($fullName)) { continue }
-
-                # Validate it's a WoW addon by checking for .toc files
-                Write-Verbose "  Checking $fullName for .toc files..."
-                $tocCheck = gh api "repos/$fullName/git/trees/HEAD?recursive=1" --jq '.tree[].path' 2>&1
-                if ($LASTEXITCODE -ne 0) { continue }
-
-                $hasToc = $tocCheck | Where-Object { $_ -match '\.toc$' } | Select-Object -First 1
-                if (-not $hasToc) { continue }
-
-                # It's a WoW addon — get full repo info
-                $repoInfo = gh repo view $fullName --json nameWithOwner,description,stargazerCount,updatedAt,url 2>&1
-                if ($LASTEXITCODE -eq 0) {
-                    try {
-                        $repoData = $repoInfo | ConvertFrom-Json
-                        # Normalize field names to match gh search repos output
-                        $normalized = [PSCustomObject]@{
-                            fullName        = $repoData.nameWithOwner
-                            description     = $repoData.description
-                            stargazersCount = $repoData.stargazerCount
-                            updatedAt       = $repoData.updatedAt
-                            url             = $repoData.url
-                        }
-                        $allRepos[$normalized.fullName] = $normalized
-                        Write-Verbose "  ✓ $fullName is a WoW addon"
-                    } catch {}
-                }
-            }
-        } catch {}
-    }
-}
-
-$repos = @($allRepos.Values)
-
-if (-not $repos -or $repos.Count -eq 0) {
+if ($candidates.Count -eq 0) {
+    Write-Host ""
     Write-Host "No results found for '$Query'" -ForegroundColor Yellow
     return
 }
 
+Write-Host ""
+Write-Host "  Validating $($candidates.Count) candidates for retail .toc files..." -ForegroundColor Gray
+
+# Validate: check each candidate has .toc files with retail Interface version (>= 100000)
+$validated = @()
+foreach ($repo in $candidates.Values) {
+    if ($validated.Count -ge $Limit) { break }
+
+    $fullName = $repo.fullName
+    Write-Verbose "  Checking $fullName..."
+
+    # Get file tree
+    $tocFiles = $null
+    try {
+        $treeOutput = gh api "repos/$fullName/git/trees/HEAD?recursive=1" --jq '[.tree[].path | select(test("\\.toc$"))]' 2>&1
+        if ($LASTEXITCODE -eq 0 -and $treeOutput) {
+            $tocFiles = $treeOutput | ConvertFrom-Json
+        }
+    } catch {}
+
+    if (-not $tocFiles -or $tocFiles.Count -eq 0) {
+        Write-Verbose "    No .toc files, skipping"
+        continue
+    }
+
+    # Check first .toc for retail Interface version
+    $isRetail = $false
+    $tocPath = $tocFiles | Select-Object -First 1
+    try {
+        $tocContent = gh api "repos/$fullName/contents/$tocPath" --jq '.content' 2>&1
+        if ($LASTEXITCODE -eq 0 -and $tocContent) {
+            $decoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($tocContent))
+            $interfaceLine = ($decoded -split "`n") | Where-Object { $_ -match '^\s*##\s*Interface\s*:' } | Select-Object -First 1
+            if ($interfaceLine) {
+                # Extract all version numbers from the line
+                $versions = [regex]::Matches($interfaceLine, '\d+') | ForEach-Object { [int]$_.Value }
+                # Retail versions are >= 100000 (e.g., 110207, 120000)
+                $isRetail = ($versions | Where-Object { $_ -ge 100000 }).Count -gt 0
+            }
+        }
+    } catch {}
+
+    if (-not $isRetail) {
+        Write-Verbose "    No retail Interface version, skipping"
+        continue
+    }
+
+    $validated += $repo
+    Write-Host "    ✓ $fullName" -ForegroundColor DarkGreen
+}
+
+if ($validated.Count -eq 0) {
+    Write-Host ""
+    Write-Host "No retail WoW addons found for '$Query'" -ForegroundColor Yellow
+    return
+}
+
 # Load addon-repos.json to mark already-installed addons
-$profileDir = Split-Path -Parent $global:PROFILE.CurrentUserAllHosts
+$profileDir = if ($IsWindows -or $env:OS -match 'Windows') {
+    Join-Path $HOME "Documents" "PowerShell"
+} else {
+    Join-Path $HOME ".config" "powershell"
+}
 $addonReposPath = Join-Path $profileDir "addon-repos.json"
 $installedRepos = @{}
 if (Test-Path $addonReposPath) {
@@ -143,11 +172,12 @@ if (Test-Path $addonReposPath) {
     }
 }
 
-Write-Host "Results:" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Results ($($validated.Count) retail addons):" -ForegroundColor Cyan
 Write-Host ""
 
 $index = 0
-foreach ($repo in $repos) {
+foreach ($repo in $validated) {
     $index++
     $fullName = $repo.fullName
     $desc = if ($repo.description) { $repo.description } else { "(no description)" }
