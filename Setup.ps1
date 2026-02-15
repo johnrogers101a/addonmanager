@@ -112,7 +112,7 @@ if (-not (Test-Path $initScript)) {
 } else {
     $initContent = Get-Content -Path $initScript -Raw
 
-    if ($initContent -match 'function Wow-Download' -and $initContent -match 'function Get-Addons' -and $initContent -match 'function Wow-Purge' -and $initContent -match 'function Install-Addon' -and $initContent -match 'function Find-Addons') {
+    if ($initContent -match 'function Wow-Download' -and $initContent -match 'function Get-Addons' -and $initContent -match 'function Wow-Purge' -and $initContent -match 'function Install-Addon' -and $initContent -match 'function Find-Addons' -and $initContent -match 'function Show-Addons') {
         Write-Host "  ℹ Commands already registered" -ForegroundColor Yellow
     } else {
         # Remove existing WoW block if present (to re-register with new commands)
@@ -177,6 +177,11 @@ function Find-Addons {
     $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-FindAddons.ps1"
     & $scriptPath @args
 }
+
+function Show-Addons {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-ShowAddons.ps1"
+    & $scriptPath @args
+}
 '@
         if ($initContent -match '(?m)^# Display loaded custom commands') {
             $initContent = $initContent -replace '(?m)^# Display loaded custom commands', "$wowBlock`n`n# Display loaded custom commands"
@@ -196,7 +201,8 @@ foreach ($cmd in @(
     @{ Name = "Get-Addons"; Synopsis = "Download and install WoW addons from GitHub"; Script = "Invoke-GetAddons.ps1" },
     @{ Name = "Wow-Purge"; Synopsis = "Delete Azure storage account and start fresh"; Script = "Invoke-WowPurge.ps1" },
     @{ Name = "Install-Addon"; Synopsis = "Install a new WoW addon from GitHub"; Script = "Invoke-InstallAddon.ps1" },
-    @{ Name = "Find-Addons"; Synopsis = "Search GitHub for WoW addons"; Script = "Invoke-FindAddons.ps1" }
+    @{ Name = "Find-Addons"; Synopsis = "Search GitHub for WoW addons"; Script = "Invoke-FindAddons.ps1" },
+    @{ Name = "Show-Addons"; Synopsis = "List currently installed WoW addons"; Script = "Invoke-ShowAddons.ps1" }
 )) {
     $wrapper = @"
 #!/usr/bin/env pwsh
@@ -583,4 +589,6 @@ Write-Host "  Install-Addon   " -NoNewline -ForegroundColor Yellow
 Write-Host "- Install a new WoW addon from GitHub" -ForegroundColor Gray
 Write-Host "  Find-Addons     " -NoNewline -ForegroundColor Yellow
 Write-Host "- Search GitHub for WoW addons" -ForegroundColor Gray
+Write-Host "  Show-Addons     " -NoNewline -ForegroundColor Yellow
+Write-Host "- List currently installed addons" -ForegroundColor Gray
 Write-Host ""
