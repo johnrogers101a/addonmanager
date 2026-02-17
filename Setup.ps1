@@ -112,7 +112,7 @@ if (-not (Test-Path $initScript)) {
 } else {
     $initContent = Get-Content -Path $initScript -Raw
 
-    if ($initContent -match 'function Wow-Download' -and $initContent -match 'function Get-Addons' -and $initContent -match 'function Wow-Purge' -and $initContent -match 'function Install-Addon' -and $initContent -match 'function Find-Addons' -and $initContent -match 'function Show-Addons') {
+    if ($initContent -match 'function Wow-Download' -and $initContent -match 'function Get-Addons' -and $initContent -match 'function Wow-Purge' -and $initContent -match 'function Install-Addon' -and $initContent -match 'function Find-Addons' -and $initContent -match 'function Show-Addons' -and $initContent -match 'function Remove-Addon') {
         Write-Host "  ℹ Commands already registered" -ForegroundColor Yellow
     } else {
         # Remove existing WoW block if present (to re-register with new commands)
@@ -182,6 +182,11 @@ function Show-Addons {
     $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-ShowAddons.ps1"
     & $scriptPath @args
 }
+
+function Remove-Addon {
+    $scriptPath = Join-Path (Split-Path -Parent $PSScriptRoot) "WoW" "Invoke-RemoveAddon.ps1"
+    & $scriptPath @args
+}
 '@
         if ($initContent -match '(?m)^# Display loaded custom commands') {
             $initContent = $initContent -replace '(?m)^# Display loaded custom commands', "$wowBlock`n`n# Display loaded custom commands"
@@ -202,7 +207,8 @@ foreach ($cmd in @(
     @{ Name = "Wow-Purge"; Synopsis = "Delete Azure storage account and start fresh"; Script = "Invoke-WowPurge.ps1" },
     @{ Name = "Install-Addon"; Synopsis = "Install a new WoW addon from GitHub"; Script = "Invoke-InstallAddon.ps1" },
     @{ Name = "Find-Addons"; Synopsis = "Search GitHub for WoW addons"; Script = "Invoke-FindAddons.ps1" },
-    @{ Name = "Show-Addons"; Synopsis = "List currently installed WoW addons"; Script = "Invoke-ShowAddons.ps1" }
+    @{ Name = "Show-Addons"; Synopsis = "List currently installed WoW addons"; Script = "Invoke-ShowAddons.ps1" },
+    @{ Name = "Remove-Addon"; Synopsis = "Remove a WoW addon and upload changes"; Script = "Invoke-RemoveAddon.ps1" }
 )) {
     $wrapper = @"
 #!/usr/bin/env pwsh

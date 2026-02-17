@@ -44,12 +44,12 @@
 
 [CmdletBinding()]
 param(
-    [Parameter()]
+    [Parameter(Position = 0)]
+    [string]$Version = 'latest',
+
+    [Parameter(Position = 1)]
     [ValidateSet('retail', 'classic', 'classicCata', 'beta', 'ptr', 'all')]
     [string]$Installation = 'all',
-
-    [Parameter()]
-    [string]$Version = 'latest',
     
     [Parameter()]
     [switch]$WhatIf
