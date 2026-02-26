@@ -1,0 +1,3024 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "description": "Comprehensive catalog of WoW addons available on GitHub for installation",
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-14T22:18:00Z",
+  "totalAddons": 100,
+  "stats": {
+    "installed": 0,
+    "available": 100,
+    "popular": 39
+  },
+  "addons": {
+    "WeakAuras2": {
+      "github": {
+        "owner": "WeakAuras",
+        "repo": "WeakAuras2",
+        "fullName": "WeakAuras/WeakAuras2",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "World of Warcraft addon that provides a powerful framework to display customizable graphics on your screen.",
+        "stars": 1419,
+        "forks": 351,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "custom-textures",
+          "discord",
+          "extension",
+          "flexible-framework"
+        ],
+        "url": "https://github.com/WeakAuras/WeakAuras2",
+        "lastUpdated": "2026-02-13T16:28:16Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Questie": {
+      "github": {
+        "owner": "Questie",
+        "repo": "Questie",
+        "fullName": "Questie/Questie",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Questie: The WoW Classic quest helper",
+        "stars": 1061,
+        "forks": 333,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "lua",
+          "quest",
+          "questie",
+          "world-of-warcraft"
+        ],
+        "url": "https://github.com/Questie/Questie",
+        "lastUpdated": "2026-02-14T21:13:33Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "DeadlyBossMods": {
+      "github": {
+        "owner": "DeadlyBossMods",
+        "repo": "DeadlyBossMods",
+        "fullName": "DeadlyBossMods/DeadlyBossMods",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "The ultimate encounter helper to give you fight info that's easy to process at a glance. DBM aims to focus on what's happening to you, and what YOU need to do about it.",
+        "stars": 271,
+        "forks": 67,
+        "language": "Lua",
+        "topics": [
+          "boss",
+          "encounter",
+          "lua",
+          "world-of-warcraft",
+          "wow"
+        ],
+        "url": "https://github.com/DeadlyBossMods/DeadlyBossMods",
+        "lastUpdated": "2026-02-14T04:41:01Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Auctionator": {
+      "github": {
+        "owner": "TheMouseNest",
+        "repo": "Auctionator",
+        "fullName": "TheMouseNest/Auctionator",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "The Auctionator addon for World of Warcraft.",
+        "stars": 266,
+        "forks": 108,
+        "language": "Lua",
+        "topics": [
+          "auction-house",
+          "world-of-warcraft",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/TheMouseNest/Auctionator",
+        "lastUpdated": "2026-02-10T22:47:07Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "oUF": {
+      "github": {
+        "owner": "oUF-wow",
+        "repo": "oUF",
+        "fullName": "oUF-wow/oUF",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW AddOn - Unit frame framework.",
+        "stars": 233,
+        "forks": 60,
+        "language": "Lua",
+        "topics": [
+          "framework",
+          "lua",
+          "ouf",
+          "warcraft-addon",
+          "wow-addon"
+        ],
+        "url": "https://github.com/oUF-wow/oUF",
+        "lastUpdated": "2026-02-14T19:36:05Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "DBM-Warmane": {
+      "github": {
+        "owner": "Zidras",
+        "repo": "DBM-Warmane",
+        "fullName": "Zidras/DBM-Warmane",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "DBM for Warmane (Icecrown, Lordaeron, Frostmourne, Onyxia)",
+        "stars": 212,
+        "forks": 94,
+        "language": "Lua",
+        "topics": [
+          "dbm",
+          "world-of-warcraft",
+          "wotlk",
+          "wotlk-backport",
+          "wotlk-wow"
+        ],
+        "url": "https://github.com/Zidras/DBM-Warmane",
+        "lastUpdated": "2026-02-13T06:56:03Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "vanilla-wow-addons": {
+      "github": {
+        "owner": "ericraio",
+        "repo": "vanilla-wow-addons",
+        "fullName": "ericraio/vanilla-wow-addons",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Wow Addons for Vanilla WoW",
+        "stars": 173,
+        "forks": 373,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/ericraio/vanilla-wow-addons",
+        "lastUpdated": "2026-01-23T06:21:18Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "hero-rotation": {
+      "github": {
+        "owner": "herotc",
+        "repo": "hero-rotation",
+        "fullName": "herotc/hero-rotation",
+        "branch": "thewarwithin"
+      },
+      "metadata": {
+        "description": "WoW Addon - Attempt to provide the useful and precise information to execute the best possible DPS rotation in every situation.",
+        "stars": 171,
+        "forks": 130,
+        "language": "Lua",
+        "topics": [
+          "dps",
+          "helper",
+          "rotation",
+          "world-of-warcraft",
+          "wow-addon"
+        ],
+        "url": "https://github.com/herotc/hero-rotation",
+        "lastUpdated": "2026-02-12T09:48:37Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Guidelime": {
+      "github": {
+        "owner": "max-ri",
+        "repo": "Guidelime",
+        "fullName": "max-ri/Guidelime",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Guidelime: A WoW Classic addon for leveling guides with automatic progress updates",
+        "stars": 168,
+        "forks": 38,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/max-ri/Guidelime",
+        "lastUpdated": "2026-02-12T12:22:45Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Cell": {
+      "github": {
+        "owner": "enderneko",
+        "repo": "Cell",
+        "fullName": "enderneko/Cell",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "A World of Warcraft raid frame addon.",
+        "stars": 162,
+        "forks": 55,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "world-of-warcraft",
+          "world-of-warcraft-addon",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/enderneko/Cell",
+        "lastUpdated": "2026-02-12T20:31:58Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "AdiBags": {
+      "github": {
+        "owner": "AdiAddons",
+        "repo": "AdiBags",
+        "fullName": "AdiAddons/AdiBags",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon — Adirelle's bag addon.",
+        "stars": 153,
+        "forks": 110,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "bags",
+          "bags-inventory",
+          "inventory",
+          "lua"
+        ],
+        "url": "https://github.com/AdiAddons/AdiBags",
+        "lastUpdated": "2026-02-14T00:57:44Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "SavedInstances": {
+      "github": {
+        "owner": "SavedInstances",
+        "repo": "SavedInstances",
+        "fullName": "SavedInstances/SavedInstances",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Addon that keeps track of the instance/raid lockouts saved against your characters, and related currencies and cooldowns.",
+        "stars": 150,
+        "forks": 101,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "world-of-warcraft",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/SavedInstances/SavedInstances",
+        "lastUpdated": "2026-02-10T23:31:23Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "TipTac": {
+      "github": {
+        "owner": "frozn",
+        "repo": "TipTac",
+        "fullName": "frozn/TipTac",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "WoW AddOn TipTac Reborn",
+        "stars": 128,
+        "forks": 36,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/frozn/TipTac",
+        "lastUpdated": "2026-02-13T01:37:40Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Ace3": {
+      "github": {
+        "owner": "WoWUIDev",
+        "repo": "Ace3",
+        "fullName": "WoWUIDev/Ace3",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Ace3 WoW AddOn Development Framework",
+        "stars": 100,
+        "forks": 23,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/WoWUIDev/Ace3",
+        "lastUpdated": "2026-02-07T21:06:49Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "NetherBot": {
+      "github": {
+        "owner": "NetherstormX",
+        "repo": "NetherBot",
+        "fullName": "NetherstormX/NetherBot",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "Netherbot wow addon is tool for NPCBots for TrinityCore and AzerothCore 3.3.5, to help you play with npcbots.",
+        "stars": 87,
+        "forks": 33,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/NetherstormX/NetherBot",
+        "lastUpdated": "2025-10-11T14:36:41Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "AtlasLootClassic": {
+      "github": {
+        "owner": "Hoizame",
+        "repo": "AtlasLootClassic",
+        "fullName": "Hoizame/AtlasLootClassic",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "AtlasLootClassic",
+        "stars": 87,
+        "forks": 96,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "world-of-warcraft",
+          "wow-addon"
+        ],
+        "url": "https://github.com/Hoizame/AtlasLootClassic",
+        "lastUpdated": "2025-06-18T17:00:59Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "DevTool": {
+      "github": {
+        "owner": "brittyazel",
+        "repo": "DevTool",
+        "fullName": "brittyazel/DevTool",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "A multipurpose tool to assist with World of Warcraft addon development",
+        "stars": 86,
+        "forks": 9,
+        "language": "Lua",
+        "topics": [
+          "development-tools",
+          "inspection",
+          "lua",
+          "world-of-warcraft",
+          "world-of-warcraft-addon"
+        ],
+        "url": "https://github.com/brittyazel/DevTool",
+        "lastUpdated": "2026-02-10T18:31:20Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "kuinameplates2": {
+      "github": {
+        "owner": "kesava-wow",
+        "repo": "kuinameplates2",
+        "fullName": "kesava-wow/kuinameplates2",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Prettier nameplates.",
+        "stars": 84,
+        "forks": 52,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/kesava-wow/kuinameplates2",
+        "lastUpdated": "2026-02-08T13:59:40Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "RealUI": {
+      "github": {
+        "owner": "RealUI",
+        "repo": "RealUI",
+        "fullName": "RealUI/RealUI",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "A minimalistic UI for World of Warcraft designed to be functional, yet also efficient and elegant.",
+        "stars": 83,
+        "forks": 25,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "world-of-warcraft",
+          "world-of-warcraft-addon",
+          "wow-addon"
+        ],
+        "url": "https://github.com/RealUI/RealUI",
+        "lastUpdated": "2026-02-13T00:58:40Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "WIIIUI": {
+      "github": {
+        "owner": "Fiurs-Hearth",
+        "repo": "WIIIUI",
+        "fullName": "Fiurs-Hearth/WIIIUI",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "A Warcraft III UI addon for vanilla WoW",
+        "stars": 81,
+        "forks": 11,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/Fiurs-Hearth/WIIIUI",
+        "lastUpdated": "2026-02-12T02:22:46Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "premade-groups-filter": {
+      "github": {
+        "owner": "0xbs",
+        "repo": "premade-groups-filter",
+        "fullName": "0xbs/premade-groups-filter",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "A World of Warcraft addon for powerful filtering of premade group listings.",
+        "stars": 78,
+        "forks": 37,
+        "language": "Lua",
+        "topics": [
+          "addons",
+          "games",
+          "world-of-warcraft",
+          "world-of-warcraft-addon",
+          "wow"
+        ],
+        "url": "https://github.com/0xbs/premade-groups-filter",
+        "lastUpdated": "2026-02-10T08:07:04Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "zUI": {
+      "github": {
+        "owner": "Ko0z",
+        "repo": "zUI",
+        "fullName": "Ko0z/zUI",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "This WoW vanilla addon aims to preserve the blizzard look/design but with a modern touch, some quality of life features and as lightweight as possible.",
+        "stars": 68,
+        "forks": 13,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/Ko0z/zUI",
+        "lastUpdated": "2026-01-26T15:33:55Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "wow-addon-playerbots": {
+      "github": {
+        "owner": "whipowill",
+        "repo": "wow-addon-playerbots",
+        "fullName": "whipowill/wow-addon-playerbots",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "An addon for World of Warcraft v3.3.5 to work w/ the AzerothCore PlayerBots module.",
+        "stars": 67,
+        "forks": 38,
+        "language": "Lua",
+        "topics": [
+          "wow"
+        ],
+        "url": "https://github.com/whipowill/wow-addon-playerbots",
+        "lastUpdated": "2025-05-24T21:07:03Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "simc-addon": {
+      "github": {
+        "owner": "simulationcraft",
+        "repo": "simc-addon",
+        "fullName": "simulationcraft/simc-addon",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "SimulationCraft WoW Addon",
+        "stars": 65,
+        "forks": 32,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/simulationcraft/simc-addon",
+        "lastUpdated": "2026-01-21T04:00:30Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Baganator": {
+      "github": {
+        "owner": "TheMouseNest",
+        "repo": "Baganator",
+        "fullName": "TheMouseNest/Baganator",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "World of Warcraft Addon: Bag/bank overhaul. With category groups or single bag views, including showing alt inventories.",
+        "stars": 64,
+        "forks": 23,
+        "language": "Lua",
+        "topics": [
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/TheMouseNest/Baganator",
+        "lastUpdated": "2026-02-12T23:39:04Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Rarity": {
+      "github": {
+        "owner": "WowRarity",
+        "repo": "Rarity",
+        "fullName": "WowRarity/Rarity",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Collectibles and statistics tracking addon for World of Warcraft",
+        "stars": 64,
+        "forks": 39,
+        "language": "Lua",
+        "topics": [
+          "blizzard",
+          "blizzard-games",
+          "lua",
+          "world-of-warcraft",
+          "worldofwarcraft"
+        ],
+        "url": "https://github.com/WowRarity/Rarity",
+        "lastUpdated": "2026-02-13T21:21:45Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ClassicCastbars": {
+      "github": {
+        "owner": "wardz",
+        "repo": "ClassicCastbars",
+        "fullName": "wardz/ClassicCastbars",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "[WoW] Customizable target castbars for Classic and Retail.",
+        "stars": 64,
+        "forks": 5,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "classic",
+          "combat",
+          "leveling",
+          "lua"
+        ],
+        "url": "https://github.com/wardz/ClassicCastbars",
+        "lastUpdated": "2026-02-11T14:41:18Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "WoW-DragonflightUI": {
+      "github": {
+        "owner": "Karl-HeinzSchneider",
+        "repo": "WoW-DragonflightUI",
+        "fullName": "Karl-HeinzSchneider/WoW-DragonflightUI",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "World of Warcraft (classic) Addon to bring the new Retail UI to WoW Classic!",
+        "stars": 62,
+        "forks": 31,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "classic",
+          "dragonflight",
+          "lua",
+          "world-of-warcraft"
+        ],
+        "url": "https://github.com/Karl-HeinzSchneider/WoW-DragonflightUI",
+        "lastUpdated": "2026-02-14T16:28:29Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "wow-classic-gearmenu": {
+      "github": {
+        "owner": "RagedUnicorn",
+        "repo": "wow-classic-gearmenu",
+        "fullName": "RagedUnicorn/wow-classic-gearmenu",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Classic Addon for switching between items and keybinding them",
+        "stars": 62,
+        "forks": 11,
+        "language": "Lua",
+        "topics": [
+          "classic",
+          "classic-wow",
+          "classic-wow-addons",
+          "curseforge",
+          "wago"
+        ],
+        "url": "https://github.com/RagedUnicorn/wow-classic-gearmenu",
+        "lastUpdated": "2026-02-14T19:42:13Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "andromeda": {
+      "github": {
+        "owner": "fafaraway",
+        "repo": "andromeda",
+        "fullName": "fafaraway/andromeda",
+        "branch": "development"
+      },
+      "metadata": {
+        "description": "💖 A user interface replacement addon for World of Warcraft.",
+        "stars": 62,
+        "forks": 18,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft",
+          "world-of-warcraft-addon",
+          "wow-addon"
+        ],
+        "url": "https://github.com/fafaraway/andromeda",
+        "lastUpdated": "2026-01-26T08:27:10Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Mail": {
+      "github": {
+        "owner": "shirsig",
+        "repo": "Mail",
+        "fullName": "shirsig/Mail",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Vanilla WoW Mail AddOn. IMPORTANT: The folder name must be \"Mail\".",
+        "stars": 60,
+        "forks": 27,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/shirsig/Mail",
+        "lastUpdated": "2025-12-11T19:54:01Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "libdatabroker-1-1": {
+      "github": {
+        "owner": "tekkub",
+        "repo": "libdatabroker-1-1",
+        "fullName": "tekkub/libdatabroker-1-1",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Library - A central registry for addons looking for something to display their data",
+        "stars": 59,
+        "forks": 19,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/tekkub/libdatabroker-1-1",
+        "lastUpdated": "2026-01-25T15:42:17Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "SuperMacro": {
+      "github": {
+        "owner": "Monteo",
+        "repo": "SuperMacro",
+        "fullName": "Monteo/SuperMacro",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Addons for World of Warcraft 1.12.1",
+        "stars": 59,
+        "forks": 31,
+        "language": "Lua",
+        "topics": [
+          "vanilla",
+          "wow-addon"
+        ],
+        "url": "https://github.com/Monteo/SuperMacro",
+        "lastUpdated": "2026-01-23T09:03:31Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "wowless": {
+      "github": {
+        "owner": "wowless",
+        "repo": "wowless",
+        "fullName": "wowless/wowless",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "A headless WoW client Lua and FrameXML interpreter. Intended for addon testing.",
+        "stars": 58,
+        "forks": 8,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/wowless/wowless",
+        "lastUpdated": "2026-02-14T17:28:09Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Scorpio": {
+      "github": {
+        "owner": "kurapica",
+        "repo": "Scorpio",
+        "fullName": "kurapica/Scorpio",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Scorpio Addon FrameWork for World of Warcraft",
+        "stars": 57,
+        "forks": 5,
+        "language": "Lua",
+        "topics": [
+          "ploop",
+          "wow-addon"
+        ],
+        "url": "https://github.com/kurapica/Scorpio",
+        "lastUpdated": "2026-02-09T14:48:50Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "mangosbot-addon": {
+      "github": {
+        "owner": "ike3",
+        "repo": "mangosbot-addon",
+        "fullName": "ike3/mangosbot-addon",
+        "branch": "1.12"
+      },
+      "metadata": {
+        "description": "WoW UI Addon for mangosbot",
+        "stars": 55,
+        "forks": 42,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/ike3/mangosbot-addon",
+        "lastUpdated": "2026-02-07T10:19:31Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "RetailUI": {
+      "github": {
+        "owner": "a3st",
+        "repo": "RetailUI",
+        "fullName": "a3st/RetailUI",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "WoW Legacy Addon - Retail UI (3.3.5a)",
+        "stars": 55,
+        "forks": 11,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "lua",
+          "wotlk",
+          "wow",
+          "wowaddons"
+        ],
+        "url": "https://github.com/a3st/RetailUI",
+        "lastUpdated": "2026-01-12T20:00:38Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Carbonite-All-in-One-Retail-Classic": {
+      "github": {
+        "owner": "IrcDirk",
+        "repo": "Carbonite-All-in-One-Retail-Classic",
+        "fullName": "IrcDirk/Carbonite-All-in-One-Retail-Classic",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Carbonite + Modules for WoW Retail and Classic",
+        "stars": 55,
+        "forks": 23,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "world-of-warcraft",
+          "wow",
+          "wow-addon",
+          "wow-classic"
+        ],
+        "url": "https://github.com/IrcDirk/Carbonite-All-in-One-Retail-Classic",
+        "lastUpdated": "2026-02-10T08:49:15Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "AdvancedInterfaceOptions": {
+      "github": {
+        "owner": "Stanzilla",
+        "repo": "AdvancedInterfaceOptions",
+        "fullName": "Stanzilla/AdvancedInterfaceOptions",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon that restores access to removed interface options in Legion",
+        "stars": 54,
+        "forks": 13,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft",
+          "world-of-warcraft-addon",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/Stanzilla/AdvancedInterfaceOptions",
+        "lastUpdated": "2026-02-01T18:13:12Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Masque": {
+      "github": {
+        "owner": "SFX-WoW",
+        "repo": "Masque",
+        "fullName": "SFX-WoW/Masque",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "A button-skinning engine for World of Warcraft.",
+        "stars": 50,
+        "forks": 9,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "masque",
+          "world-of-warcraft",
+          "world-of-warcraft-addon",
+          "world-of-warcraft-classic"
+        ],
+        "url": "https://github.com/SFX-WoW/Masque",
+        "lastUpdated": "2026-01-29T07:57:54Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "wow_peggle": {
+      "github": {
+        "owner": "adamz01h",
+        "repo": "wow_peggle",
+        "fullName": "adamz01h/wow_peggle",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Peggle Addon",
+        "stars": 49,
+        "forks": 14,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/adamz01h/wow_peggle",
+        "lastUpdated": "2025-01-07T23:34:39Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "SpellCalc": {
+      "github": {
+        "owner": "coolmodi",
+        "repo": "SpellCalc",
+        "fullName": "coolmodi/SpellCalc",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "A WoW classic addon providing information for spells, like actual damage done, crit and hit chance, scaling etc.",
+        "stars": 47,
+        "forks": 11,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/coolmodi/SpellCalc",
+        "lastUpdated": "2026-02-14T02:04:24Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ls_UI": {
+      "github": {
+        "owner": "ls-",
+        "repo": "ls_UI",
+        "fullName": "ls-/ls_UI",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Development repository of ls: UI",
+        "stars": 46,
+        "forks": 7,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "ouf",
+          "ui",
+          "warcraft-addon",
+          "world-of-warcraft"
+        ],
+        "url": "https://github.com/ls-/ls_UI",
+        "lastUpdated": "2026-01-29T09:19:46Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "wow_335a_addons": {
+      "github": {
+        "owner": "TrinityCore",
+        "repo": "wow_335a_addons",
+        "fullName": "TrinityCore/wow_335a_addons",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "World of warcraft 3.3.5a addons",
+        "stars": 45,
+        "forks": 51,
+        "language": "Lua",
+        "topics": [
+          "hacktoberfest",
+          "wotlk-wow",
+          "wotlk-wow-addons"
+        ],
+        "url": "https://github.com/TrinityCore/wow_335a_addons",
+        "lastUpdated": "2025-12-15T01:19:44Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "WotLK-Auctionator": {
+      "github": {
+        "owner": "alchem1ster",
+        "repo": "WotLK-Auctionator",
+        "fullName": "alchem1ster/WotLK-Auctionator",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "Auctionator for World of Warcraft - Wrath of the Lich King (3.3.5a)",
+        "stars": 45,
+        "forks": 6,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft",
+          "wotlk",
+          "wotlk-wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/alchem1ster/WotLK-Auctionator",
+        "lastUpdated": "2026-02-14T07:48:58Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "hero-lib": {
+      "github": {
+        "owner": "herotc",
+        "repo": "hero-lib",
+        "fullName": "herotc/hero-lib",
+        "branch": "thewarwithin"
+      },
+      "metadata": {
+        "description": "WoW Addon - Core Library used by HeroRotation and AethysTools, can also be used by others 3rd-Party Addons.",
+        "stars": 44,
+        "forks": 35,
+        "language": "Lua",
+        "topics": [
+          "api",
+          "library",
+          "world-of-warcraft",
+          "wow-addon"
+        ],
+        "url": "https://github.com/herotc/hero-lib",
+        "lastUpdated": "2025-12-03T05:52:38Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "XIV_Databar": {
+      "github": {
+        "owner": "Vicious-wow",
+        "repo": "XIV_Databar",
+        "fullName": "Vicious-wow/XIV_Databar",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "AddOn for WoW that displays a databar at the bottom/top of the screen with several modules and customization options.",
+        "stars": 43,
+        "forks": 15,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "lua",
+          "ui",
+          "wow"
+        ],
+        "url": "https://github.com/Vicious-wow/XIV_Databar",
+        "lastUpdated": "2024-03-26T11:04:06Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "idTip": {
+      "github": {
+        "owner": "silverwind",
+        "repo": "idTip",
+        "fullName": "silverwind/idTip",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon: Adds IDs to the ingame tooltips",
+        "stars": 42,
+        "forks": 32,
+        "language": "Lua",
+        "topics": [
+          "tooltip",
+          "wow-addon"
+        ],
+        "url": "https://github.com/silverwind/idTip",
+        "lastUpdated": "2026-02-14T13:27:20Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "WDM-addons": {
+      "github": {
+        "owner": "Trimitor",
+        "repo": "WDM-addons",
+        "fullName": "Trimitor/WDM-addons",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "Collection of addons compatible with Classic & TBC Dungeon Maps patch for WoW WotLK (3.3.5a)",
+        "stars": 40,
+        "forks": 6,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/Trimitor/WDM-addons",
+        "lastUpdated": "2026-02-13T13:11:39Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "SUI": {
+      "github": {
+        "owner": "Syiana",
+        "repo": "SUI",
+        "fullName": "Syiana/SUI",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "SUI - The Dark Side of World of Warcraft",
+        "stars": 40,
+        "forks": 14,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "lua",
+          "pvp",
+          "sui",
+          "syianaui"
+        ],
+        "url": "https://github.com/Syiana/SUI",
+        "lastUpdated": "2026-01-28T11:00:54Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "TourGuideVanilla": {
+      "github": {
+        "owner": "cralor",
+        "repo": "TourGuideVanilla",
+        "fullName": "cralor/TourGuideVanilla",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "See TourGuideClassic for 1.13!!         Tekkub's TourGuide Addon backported for WoW 1.12",
+        "stars": 39,
+        "forks": 26,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/cralor/TourGuideVanilla",
+        "lastUpdated": "2025-08-13T13:19:07Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "AdiButtonAuras": {
+      "github": {
+        "owner": "AdiAddons",
+        "repo": "AdiButtonAuras",
+        "fullName": "AdiAddons/AdiButtonAuras",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW addon - Display auras on action buttons.",
+        "stars": 38,
+        "forks": 23,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/AdiAddons/AdiButtonAuras",
+        "lastUpdated": "2025-10-31T15:55:59Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ImprovedBlizzardUI": {
+      "github": {
+        "owner": "kaytotes",
+        "repo": "ImprovedBlizzardUI",
+        "fullName": "kaytotes/ImprovedBlizzardUI",
+        "branch": "develop"
+      },
+      "metadata": {
+        "description": "General improvements to the Blizzard UI",
+        "stars": 37,
+        "forks": 22,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "ui",
+          "user-interface",
+          "world-of-warcraft",
+          "wow-addon"
+        ],
+        "url": "https://github.com/kaytotes/ImprovedBlizzardUI",
+        "lastUpdated": "2026-01-26T08:28:24Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Puppeteer": {
+      "github": {
+        "owner": "OldManAlpha",
+        "repo": "Puppeteer",
+        "fullName": "OldManAlpha/Puppeteer",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "A unit frames addon for WoW Vanilla 1.12",
+        "stars": 35,
+        "forks": 9,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/OldManAlpha/Puppeteer",
+        "lastUpdated": "2026-02-02T11:44:54Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Wow1.12.1_Addons_Collection": {
+      "github": {
+        "owner": "crazypoultry",
+        "repo": "Wow1.12.1_Addons_Collection",
+        "fullName": "crazypoultry/Wow1.12.1_Addons_Collection",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "No description available",
+        "stars": 34,
+        "forks": 84,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/crazypoultry/Wow1.12.1_Addons_Collection",
+        "lastUpdated": "2026-01-18T01:06:42Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Aptechka": {
+      "github": {
+        "owner": "rgd87",
+        "repo": "Aptechka",
+        "fullName": "rgd87/Aptechka",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon - Raid Frames",
+        "stars": 34,
+        "forks": 11,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/rgd87/Aptechka",
+        "lastUpdated": "2025-12-08T00:14:55Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Altoholic_Retail": {
+      "github": {
+        "owner": "Thaoky",
+        "repo": "Altoholic_Retail",
+        "fullName": "Thaoky/Altoholic_Retail",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "WoW Altoholic Addon (WoW Retail version)",
+        "stars": 33,
+        "forks": 9,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/Thaoky/Altoholic_Retail",
+        "lastUpdated": "2026-01-21T17:50:11Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "BetterBlizzPlates": {
+      "github": {
+        "owner": "Bodify",
+        "repo": "BetterBlizzPlates",
+        "fullName": "Bodify/BetterBlizzPlates",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "Standard Blizzard nameplates with more features and easy settings",
+        "stars": 33,
+        "forks": 13,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "world-of-warcraft",
+          "world-of-warcraft-addon",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/Bodify/BetterBlizzPlates",
+        "lastUpdated": "2026-02-14T20:44:15Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "RingMenu": {
+      "github": {
+        "owner": "jsb",
+        "repo": "RingMenu",
+        "fullName": "jsb/RingMenu",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "AddOn for Classic WoW (v. 1.13), adding a circular ActionBar that can be summoned with a click",
+        "stars": 32,
+        "forks": 12,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/jsb/RingMenu",
+        "lastUpdated": "2025-12-03T12:50:53Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Pawn": {
+      "github": {
+        "owner": "VgerMods",
+        "repo": "Pawn",
+        "fullName": "VgerMods/Pawn",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "Pawn: find upgrades, do more damage, win. (Download releases and ask questions at CurseForge.)",
+        "stars": 31,
+        "forks": 27,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "lua",
+          "world-of-warcraft",
+          "world-of-warcraft-classic",
+          "wow"
+        ],
+        "url": "https://github.com/VgerMods/Pawn",
+        "lastUpdated": "2026-02-11T01:27:38Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ElvUI_ProjectZidras": {
+      "github": {
+        "owner": "Zidras",
+        "repo": "ElvUI_ProjectZidras",
+        "fullName": "Zidras/ElvUI_ProjectZidras",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "Plugin for ElvUI (3.3.5a) - new features and various improvements",
+        "stars": 31,
+        "forks": 8,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft",
+          "wotlk",
+          "wotlk-backport",
+          "wotlk-wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/Zidras/ElvUI_ProjectZidras",
+        "lastUpdated": "2026-02-14T02:46:18Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ls_Toasts": {
+      "github": {
+        "owner": "ls-",
+        "repo": "ls_Toasts",
+        "fullName": "ls-/ls_Toasts",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Development repository for LS: Toasts",
+        "stars": 30,
+        "forks": 7,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "warcraft-addon",
+          "world-of-warcraft",
+          "wow-addon"
+        ],
+        "url": "https://github.com/ls-/ls_Toasts",
+        "lastUpdated": "2026-02-09T03:50:55Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "GnomishVendorShrinker": {
+      "github": {
+        "owner": "TekNoLogic",
+        "repo": "GnomishVendorShrinker",
+        "fullName": "TekNoLogic/GnomishVendorShrinker",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon - Compact scrolling vendor frame",
+        "stars": 29,
+        "forks": 19,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/TekNoLogic/GnomishVendorShrinker",
+        "lastUpdated": "2024-08-01T04:42:12Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "BlizzMove": {
+      "github": {
+        "owner": "Kiatra",
+        "repo": "BlizzMove",
+        "fullName": "Kiatra/BlizzMove",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "World of Warcraft add-on to make the default windows movable via drag & drop.",
+        "stars": 29,
+        "forks": 11,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/Kiatra/BlizzMove",
+        "lastUpdated": "2026-02-11T13:15:39Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "prat-3-0": {
+      "github": {
+        "owner": "sylvanaar",
+        "repo": "prat-3-0",
+        "fullName": "sylvanaar/prat-3-0",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Prat-3.0 is a chat enhancement addon for world of warcraft",
+        "stars": 29,
+        "forks": 44,
+        "language": "Lua",
+        "topics": [
+          "prat",
+          "warcraft-addon",
+          "world-of-warcraft",
+          "world-of-warcraft-addon",
+          "world-of-warcraft-classic"
+        ],
+        "url": "https://github.com/sylvanaar/prat-3-0",
+        "lastUpdated": "2025-09-08T15:54:30Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "wow_bejeweled": {
+      "github": {
+        "owner": "Nighthawk42",
+        "repo": "wow_bejeweled",
+        "fullName": "Nighthawk42/wow_bejeweled",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Bejeweled Addon",
+        "stars": 28,
+        "forks": 11,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/Nighthawk42/wow_bejeweled",
+        "lastUpdated": "2025-12-22T23:20:14Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "wow-addon-tiptac": {
+      "github": {
+        "owner": "enolgor",
+        "repo": "wow-addon-tiptac",
+        "fullName": "enolgor/wow-addon-tiptac",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "No description available",
+        "stars": 28,
+        "forks": 3,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/enolgor/wow-addon-tiptac",
+        "lastUpdated": "2023-02-05T19:01:10Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "DBM-Dungeons": {
+      "github": {
+        "owner": "DeadlyBossMods",
+        "repo": "DBM-Dungeons",
+        "fullName": "DeadlyBossMods/DBM-Dungeons",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "This mod will add support for 5 man Dungeons and World Events, spanning Classic all the way to Dragonflight, to Deadly Boss Mods (DBM).",
+        "stars": 28,
+        "forks": 15,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft",
+          "wow-addon",
+          "wow-classic"
+        ],
+        "url": "https://github.com/DeadlyBossMods/DBM-Dungeons",
+        "lastUpdated": "2026-02-14T04:30:09Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "WowUp.Addon": {
+      "github": {
+        "owner": "WowUp",
+        "repo": "WowUp.Addon",
+        "fullName": "WowUp/WowUp.Addon",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "The official WowUp World of Warcraft addon",
+        "stars": 27,
+        "forks": 9,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "miscellaneous",
+          "world-of-warcraft",
+          "wow-data-export"
+        ],
+        "url": "https://github.com/WowUp/WowUp.Addon",
+        "lastUpdated": "2026-02-08T12:03:42Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "MacroToolkit": {
+      "github": {
+        "owner": "NumyAddon",
+        "repo": "MacroToolkit",
+        "fullName": "NumyAddon/MacroToolkit",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "https://www.curseforge.com/wow/addons/macro-toolkit",
+        "stars": 27,
+        "forks": 11,
+        "language": "Lua",
+        "topics": [
+          "wow-addon"
+        ],
+        "url": "https://github.com/NumyAddon/MacroToolkit",
+        "lastUpdated": "2026-02-11T13:15:25Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "NugRunning": {
+      "github": {
+        "owner": "rgd87",
+        "repo": "NugRunning",
+        "fullName": "rgd87/NugRunning",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon - Timers for over time spells and cooldowns",
+        "stars": 27,
+        "forks": 6,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/rgd87/NugRunning",
+        "lastUpdated": "2026-02-01T01:22:30Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Necrosis-classic": {
+      "github": {
+        "owner": "robert388",
+        "repo": "Necrosis-classic",
+        "fullName": "robert388/Necrosis-classic",
+        "branch": "master-rework"
+      },
+      "metadata": {
+        "description": "Necrosis addon wow classic",
+        "stars": 26,
+        "forks": 12,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/robert388/Necrosis-classic",
+        "lastUpdated": "2026-02-01T19:38:06Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ClickMorph": {
+      "github": {
+        "owner": "ketho-wow",
+        "repo": "ClickMorph",
+        "fullName": "ketho-wow/ClickMorph",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Makes morphing easy with alt-click",
+        "stars": 26,
+        "forks": 9,
+        "language": "Lua",
+        "topics": [
+          "wow-addon"
+        ],
+        "url": "https://github.com/ketho-wow/ClickMorph",
+        "lastUpdated": "2025-09-21T06:37:19Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Grid2-WoTLK": {
+      "github": {
+        "owner": "bkader",
+        "repo": "Grid2-WoTLK",
+        "fullName": "bkader/Grid2-WoTLK",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "Grid2 r736 for WoTLK",
+        "stars": 26,
+        "forks": 4,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "healer",
+          "raid",
+          "unitframes",
+          "world-of-warcraft"
+        ],
+        "url": "https://github.com/bkader/Grid2-WoTLK",
+        "lastUpdated": "2025-12-31T00:35:51Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "SP_SwingTimer": {
+      "github": {
+        "owner": "EinBaum",
+        "repo": "SP_SwingTimer",
+        "fullName": "EinBaum/SP_SwingTimer",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW 1.12.1 Addon: Auto Attack Swing Timer",
+        "stars": 24,
+        "forks": 15,
+        "language": "Lua",
+        "topics": [
+          "wow-addon"
+        ],
+        "url": "https://github.com/EinBaum/SP_SwingTimer",
+        "lastUpdated": "2024-10-16T11:47:54Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "TrinketMenu": {
+      "github": {
+        "owner": "Nixxen",
+        "repo": "TrinketMenu",
+        "fullName": "Nixxen/TrinketMenu",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "(deprecated) The Trinket Menu addon for WoW, updated for Classic WoW 1.13",
+        "stars": 24,
+        "forks": 4,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "interface-addons",
+          "toc",
+          "trinket-menu-addon",
+          "trinket-slots"
+        ],
+        "url": "https://github.com/Nixxen/TrinketMenu",
+        "lastUpdated": "2024-02-16T02:18:15Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Arh": {
+      "github": {
+        "owner": "ynazar1",
+        "repo": "Arh",
+        "fullName": "ynazar1/Arh",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "WoW Archaeology Helper addon",
+        "stars": 24,
+        "forks": 2,
+        "language": "Lua",
+        "topics": [
+          "archaeology",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/ynazar1/Arh",
+        "lastUpdated": "2026-01-21T03:14:58Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "NugComboBar": {
+      "github": {
+        "owner": "rgd87",
+        "repo": "NugComboBar",
+        "fullName": "rgd87/NugComboBar",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon - Class resources",
+        "stars": 24,
+        "forks": 2,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/rgd87/NugComboBar",
+        "lastUpdated": "2025-12-09T04:29:05Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "KethoDoc": {
+      "github": {
+        "owner": "ketho-wow",
+        "repo": "KethoDoc",
+        "fullName": "ketho-wow/KethoDoc",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Dumps the WoW API",
+        "stars": 24,
+        "forks": 3,
+        "language": "Lua",
+        "topics": [
+          "wow-addon"
+        ],
+        "url": "https://github.com/ketho-wow/KethoDoc",
+        "lastUpdated": "2026-02-12T02:20:06Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Cork": {
+      "github": {
+        "owner": "TekNoLogic",
+        "repo": "Cork",
+        "fullName": "TekNoLogic/Cork",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon - Generic reminder framework",
+        "stars": 23,
+        "forks": 31,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/TekNoLogic/Cork",
+        "lastUpdated": "2025-11-12T01:01:12Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Overachiever": {
+      "github": {
+        "owner": "Hyphie24",
+        "repo": "Overachiever",
+        "fullName": "Hyphie24/Overachiever",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "WoW Addon Overachiever",
+        "stars": 23,
+        "forks": 5,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/Hyphie24/Overachiever",
+        "lastUpdated": "2025-11-19T11:24:54Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "AuctionDB": {
+      "github": {
+        "owner": "mooreatv",
+        "repo": "AuctionDB",
+        "fullName": "mooreatv/AuctionDB",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Wow (classic) Auction Database addon",
+        "stars": 23,
+        "forks": 4,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft",
+          "wow-addon",
+          "wow-auction-house"
+        ],
+        "url": "https://github.com/mooreatv/AuctionDB",
+        "lastUpdated": "2025-08-06T00:54:53Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ChatBar": {
+      "github": {
+        "owner": "tytannial",
+        "repo": "ChatBar",
+        "fullName": "tytannial/ChatBar",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "A world of warcraft Chatframe Addon",
+        "stars": 23,
+        "forks": 3,
+        "language": "Lua",
+        "topics": [
+          "wow-addon"
+        ],
+        "url": "https://github.com/tytannial/ChatBar",
+        "lastUpdated": "2025-04-29T09:57:20Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "BetterVendorPrice": {
+      "github": {
+        "owner": "mooreatv",
+        "repo": "BetterVendorPrice",
+        "fullName": "mooreatv/BetterVendorPrice",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Vendor price with stack information to make better decisions (WoW Classic, BC and Shadowlands)",
+        "stars": 23,
+        "forks": 3,
+        "language": "Lua",
+        "topics": [
+          "wow-addon"
+        ],
+        "url": "https://github.com/mooreatv/BetterVendorPrice",
+        "lastUpdated": "2025-08-06T00:37:54Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "wow-api-docs": {
+      "github": {
+        "owner": "Gethe",
+        "repo": "wow-api-docs",
+        "fullName": "Gethe/wow-api-docs",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "An in-game graphical browser for Blizzard's API Documentation",
+        "stars": 23,
+        "forks": 2,
+        "language": "Lua",
+        "topics": [
+          "addon",
+          "api-documentation",
+          "documentation",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/Gethe/wow-api-docs",
+        "lastUpdated": "2025-11-08T00:48:09Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Vanilla-WoW-Lua-Definitions": {
+      "github": {
+        "owner": "refaim",
+        "repo": "Vanilla-WoW-Lua-Definitions",
+        "fullName": "refaim/Vanilla-WoW-Lua-Definitions",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "Vanilla WoW 1.12.1 Lua definitions for statically typed World of Warcraft addon development using Luanalysis IDE",
+        "stars": 22,
+        "forks": 5,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "world-of-warcraft",
+          "world-of-warcraft-api",
+          "world-of-warcraft-vanilla",
+          "wow"
+        ],
+        "url": "https://github.com/refaim/Vanilla-WoW-Lua-Definitions",
+        "lastUpdated": "2026-02-08T04:29:22Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Inomena": {
+      "github": {
+        "owner": "p3lim-wow",
+        "repo": "Inomena",
+        "fullName": "p3lim-wow/Inomena",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Collection of bits and bobs that make up my UI. You shouldn't use this if you expect to have a working UI afterwards.",
+        "stars": 22,
+        "forks": 5,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "warcraft-addon",
+          "wow-addon"
+        ],
+        "url": "https://github.com/p3lim-wow/Inomena",
+        "lastUpdated": "2026-02-14T12:13:35Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "wow_addons": {
+      "github": {
+        "owner": "icyblade",
+        "repo": "wow_addons",
+        "fullName": "icyblade/wow_addons",
+        "branch": "5.4.8"
+      },
+      "metadata": {
+        "description": "Addons of World of Warcraft",
+        "stars": 21,
+        "forks": 15,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/icyblade/wow_addons",
+        "lastUpdated": "2023-11-07T12:41:26Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "MissingCrafts": {
+      "github": {
+        "owner": "refaim",
+        "repo": "MissingCrafts",
+        "fullName": "refaim/MissingCrafts",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Vanilla WoW 1.12.1 and Turtle WoW addon. Shows the missing crafts for your crafting professions and how to obtain them.",
+        "stars": 21,
+        "forks": 1,
+        "language": "Lua",
+        "topics": [
+          "turtle-wow",
+          "turtle-wow-zhcn",
+          "world-of-warcraft",
+          "world-of-warcraft-addon",
+          "world-of-warcraft-turtle"
+        ],
+        "url": "https://github.com/refaim/MissingCrafts",
+        "lastUpdated": "2026-02-06T23:15:15Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ClassicUA": {
+      "github": {
+        "owner": "greenya",
+        "repo": "ClassicUA",
+        "fullName": "greenya/ClassicUA",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "World of Warcraft: Classic Ukrainization Addon",
+        "stars": 21,
+        "forks": 9,
+        "language": "Lua",
+        "topics": [
+          "localization",
+          "lua",
+          "ukrainian",
+          "world-of-warcraft",
+          "wow"
+        ],
+        "url": "https://github.com/greenya/ClassicUA",
+        "lastUpdated": "2026-01-31T18:20:11Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "_LPM": {
+      "github": {
+        "owner": "satan666",
+        "repo": "_LPM",
+        "fullName": "satan666/_LPM",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "1.12.1 Wow Multiboxing Addon Project",
+        "stars": 20,
+        "forks": 8,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/satan666/_LPM",
+        "lastUpdated": "2025-09-05T11:39:49Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "RCLootCouncil2": {
+      "github": {
+        "owner": "evil-morfar",
+        "repo": "RCLootCouncil2",
+        "fullName": "evil-morfar/RCLootCouncil2",
+        "branch": "develop"
+      },
+      "metadata": {
+        "description": "RCLootCouncil - addon for World of Warcraft",
+        "stars": 20,
+        "forks": 29,
+        "language": "Lua",
+        "topics": [
+          "rclootcouncil",
+          "world-of-warcraft",
+          "wow-addon"
+        ],
+        "url": "https://github.com/evil-morfar/RCLootCouncil2",
+        "lastUpdated": "2026-02-07T11:15:05Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ChocolateBar": {
+      "github": {
+        "owner": "Kiatra",
+        "repo": "ChocolateBar",
+        "fullName": "Kiatra/ChocolateBar",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "ChocolateBar is a World of Warcraft addons to display plugins in a bar on top or bottom of your screen",
+        "stars": 20,
+        "forks": 9,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/Kiatra/ChocolateBar",
+        "lastUpdated": "2025-12-16T06:16:28Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "ShestakUI": {
+      "github": {
+        "owner": "Wetxius",
+        "repo": "ShestakUI",
+        "fullName": "Wetxius/ShestakUI",
+        "branch": "main"
+      },
+      "metadata": {
+        "description": "Repositories for ShestakUI",
+        "stars": 20,
+        "forks": 10,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "world-of-warcraft",
+          "wow",
+          "wow-addon"
+        ],
+        "url": "https://github.com/Wetxius/ShestakUI",
+        "lastUpdated": "2026-02-14T15:57:42Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "oUF_P3lim": {
+      "github": {
+        "owner": "p3lim-wow",
+        "repo": "oUF_P3lim",
+        "fullName": "p3lim-wow/oUF_P3lim",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Minimalistic unit frames",
+        "stars": 20,
+        "forks": 3,
+        "language": "Lua",
+        "topics": [
+          "lua",
+          "ouf",
+          "warcraft-addon",
+          "wow-addon"
+        ],
+        "url": "https://github.com/p3lim-wow/oUF_P3lim",
+        "lastUpdated": "2024-09-09T12:17:48Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Buffet": {
+      "github": {
+        "owner": "TekNoLogic",
+        "repo": "Buffet",
+        "fullName": "TekNoLogic/Buffet",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon - Food/water macro generator",
+        "stars": 19,
+        "forks": 29,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/TekNoLogic/Buffet",
+        "lastUpdated": "2020-12-07T16:23:46Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Chinchilla": {
+      "github": {
+        "owner": "Ravendwyr",
+        "repo": "Chinchilla",
+        "fullName": "Ravendwyr/Chinchilla",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon - Minimap addon of awesomeness.",
+        "stars": 19,
+        "forks": 10,
+        "language": "Lua",
+        "topics": [
+          "world-of-warcraft-addon",
+          "world-of-warcraft-burning-crusade",
+          "world-of-warcraft-classic",
+          "world-of-warcraft-wotlk"
+        ],
+        "url": "https://github.com/Ravendwyr/Chinchilla",
+        "lastUpdated": "2026-01-16T20:32:45Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "Panda": {
+      "github": {
+        "owner": "TekNoLogic",
+        "repo": "Panda",
+        "fullName": "TekNoLogic/Panda",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "WoW Addon - Prospecting and Disenchanting Aide",
+        "stars": 19,
+        "forks": 13,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/TekNoLogic/Panda",
+        "lastUpdated": "2024-02-22T05:00:15Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "AnSAddons": {
+      "github": {
+        "owner": "Metric",
+        "repo": "AnSAddons",
+        "fullName": "Metric/AnSAddons",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "AnS Addons for WoW (World of Warcraft)",
+        "stars": 19,
+        "forks": 12,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/Metric/AnSAddons",
+        "lastUpdated": "2025-11-20T10:29:49Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    },
+    "SpamThrottle": {
+      "github": {
+        "owner": "Orukxu",
+        "repo": "SpamThrottle",
+        "fullName": "Orukxu/SpamThrottle",
+        "branch": "master"
+      },
+      "metadata": {
+        "description": "Vanilla WoW addon to remove unwanted chat messages",
+        "stars": 19,
+        "forks": 12,
+        "language": "Lua",
+        "topics": [],
+        "url": "https://github.com/Orukxu/SpamThrottle",
+        "lastUpdated": "2023-05-16T14:37:57Z"
+      },
+      "status": {
+        "installed": false,
+        "installPath": null
+      },
+      "updateTracking": {
+        "enabled": false,
+        "checkReleases": true,
+        "installedVersion": null,
+        "latestVersion": null
+      }
+    }
+  }
+}
