@@ -36,8 +36,8 @@
     Install all addons for classic
 
 .EXAMPLE
-    Get-Addons -Addon BugSack
-    Install only BugSack
+    Get-Addons -Addon MyAddon
+    Install only MyAddon
 
 .EXAMPLE
     Get-Addons -Force
@@ -179,10 +179,12 @@ if ($SyncOnly) {
 
 # Pre-filter: exclude addons whose hard dependencies can never be satisfied.
 # A dependency is unsatisfiable if it's in addon-repos.json with no GitHub source.
+$uninstallableNames = [string[]]($addonRepos.addons.PSObject.Properties |
+    Where-Object { -not $_.Value.github.owner -or -not $_.Value.github.repo } |
+    ForEach-Object { $_.Name })
+if (-not $uninstallableNames) { $uninstallableNames = [string[]]@() }
 $uninstallable = [System.Collections.Generic.HashSet[string]]::new(
-    [string[]]($addonRepos.addons.PSObject.Properties |
-        Where-Object { -not $_.Value.github.owner -or -not $_.Value.github.repo } |
-        ForEach-Object { $_.Name }),
+    $uninstallableNames,
     [System.StringComparer]::OrdinalIgnoreCase
 )
 
@@ -372,28 +374,33 @@ foreach ($installKey in $installationsToProcess) {
                     continue
                 }
 
-                # Look for the specific installPath folder, or use all top-level folders
-                $targetFolder = $extractedFolders | Where-Object { $_.Name -eq $installFolder }
+                # Install all top-level folders from the zip.
+                # The primary folder (matching installPath, or the only/first folder) is
+                # installed to $addonDestPath; all others are installed by their own names.
+                $primaryFolder = $extractedFolders | Where-Object { $_.Name -eq $installFolder }
+                if (-not $primaryFolder) { $primaryFolder = $extractedFolders[0] }
 
-                if ($targetFolder) {
-                    if (Test-Path $addonDestPath) {
-                        Remove-Item -Path $addonDestPath -Recurse -Force
-                    }
-                    Copy-Item -Path $targetFolder.FullName -Destination $addonDestPath -Recurse -Force
-                    Write-Host "  ✓ $addonName ($tag)" -ForegroundColor Green
-                    $installed++
-                } elseif ($extractedFolders.Count -eq 1) {
-                    if (Test-Path $addonDestPath) {
-                        Remove-Item -Path $addonDestPath -Recurse -Force
-                    }
-                    Copy-Item -Path $extractedFolders[0].FullName -Destination $addonDestPath -Recurse -Force
-                    Write-Host "  ✓ $addonName ($tag) [from $($extractedFolders[0].Name)]" -ForegroundColor Green
-                    $installed++
-                } else {
-                    $folderNames = ($extractedFolders | ForEach-Object { $_.Name }) -join ', '
-                    Write-Host "  ⚠ $addonName - expected folder '$installFolder' not found in zip (contains: $folderNames)" -ForegroundColor Yellow
-                    $warnings++
+                if (Test-Path $addonDestPath) {
+                    Remove-Item -Path $addonDestPath -Recurse -Force
                 }
+                Copy-Item -Path $primaryFolder.FullName -Destination $addonDestPath -Recurse -Force
+
+                $extraFolders = $extractedFolders | Where-Object { $_.Name -ne $primaryFolder.Name }
+                foreach ($folder in $extraFolders) {
+                    $extraDestPath = Join-Path $addonsPath $folder.Name
+                    if (Test-Path $extraDestPath) {
+                        Remove-Item -Path $extraDestPath -Recurse -Force
+                    }
+                    Copy-Item -Path $folder.FullName -Destination $extraDestPath -Recurse -Force
+                }
+
+                if ($extraFolders) {
+                    $extraNames = ($extraFolders | ForEach-Object { $_.Name }) -join ', '
+                    Write-Host "  ✓ $addonName ($tag) [also installed: $extraNames]" -ForegroundColor Green
+                } else {
+                    Write-Host "  ✓ $addonName ($tag)" -ForegroundColor Green
+                }
+                $installed++
             } else {
                 # ── Clone fallback path ──────────────────────────────────────
                 $branch = $addonInfo.github.branch
@@ -463,10 +470,12 @@ foreach ($installKey in $installationsToProcess) {
     Write-Host "Checking dependencies..." -ForegroundColor Cyan
     $removed = 0
 
+    $postUninstallableNames = [string[]]($addonRepos.addons.PSObject.Properties |
+        Where-Object { -not $_.Value.github.owner -or -not $_.Value.github.repo } |
+        ForEach-Object { $_.Name })
+    if (-not $postUninstallableNames) { $postUninstallableNames = [string[]]@() }
     $postUninstallable = [System.Collections.Generic.HashSet[string]]::new(
-        [string[]]($addonRepos.addons.PSObject.Properties |
-            Where-Object { -not $_.Value.github.owner -or -not $_.Value.github.repo } |
-            ForEach-Object { $_.Name }),
+        $postUninstallableNames,
         [System.StringComparer]::OrdinalIgnoreCase
     )
 
