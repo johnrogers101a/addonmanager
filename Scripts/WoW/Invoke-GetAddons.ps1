@@ -401,6 +401,15 @@ foreach ($installKey in $installationsToProcess) {
                     Write-Host "  ✓ $addonName ($tag)" -ForegroundColor Green
                 }
                 $installed++
+
+                # Record installed version in addon-repos.json
+                $addonReposLive = Get-Content $addonReposPath -Raw | ConvertFrom-Json
+                if ($addonReposLive.addons.$addonName) {
+                    $addonReposLive.addons.$addonName.updateTracking.installedVersion = $tag
+                    $addonReposLive.addons.$addonName.updateTracking.latestVersion    = $tag
+                    $addonReposLive.addons.$addonName.updateTracking.lastChecked      = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
+                    $addonReposLive | ConvertTo-Json -Depth 10 | Set-Content -Path $addonReposPath -Encoding UTF8
+                }
             } else {
                 # ── Clone fallback path ──────────────────────────────────────
                 $branch = $addonInfo.github.branch
