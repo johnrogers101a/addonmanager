@@ -228,10 +228,12 @@ foreach ($installProp in $config.installations.PSObject.Properties) {
     $addonReposPath = Join-Path $profileDir "addon-repos.json"
     if (Test-Path $addonReposPath) {
         $addonRepos = Get-Content $addonReposPath -Raw | ConvertFrom-Json
+        $uninstallableNames = [string[]]($addonRepos.addons.PSObject.Properties |
+            Where-Object { -not $_.Value.github.owner -or -not $_.Value.github.repo } |
+            ForEach-Object { $_.Name })
+        if (-not $uninstallableNames) { $uninstallableNames = [string[]]@() }
         $uninstallableSet = [System.Collections.Generic.HashSet[string]]::new(
-            [string[]]($addonRepos.addons.PSObject.Properties |
-                Where-Object { -not $_.Value.github.owner -or -not $_.Value.github.repo } |
-                ForEach-Object { $_.Name }),
+            $uninstallableNames,
             [System.StringComparer]::OrdinalIgnoreCase
         )
 

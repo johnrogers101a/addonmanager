@@ -23,8 +23,8 @@
     Preview changes without removing
 
 .EXAMPLE
-    Remove-Addon BugSack
-    Remove BugSack addon from retail and upload
+    Remove-Addon MyAddon
+    Remove MyAddon from retail and upload
 
 .EXAMPLE
     Remove-Addon "Btw" -SkipUpload

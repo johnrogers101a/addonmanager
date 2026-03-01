@@ -10,7 +10,7 @@
     (or clones if no release), and installs to Interface/AddOns.
 
 .PARAMETER Repo
-    GitHub repository in owner/repo format (e.g. "funkydude/BugSack")
+    GitHub repository in owner/repo format (e.g. "owner/MyAddon")
 
 .PARAMETER Name
     Override the addon folder name. By default, uses the repo name.
@@ -25,10 +25,10 @@
     Preview without installing.
 
 .EXAMPLE
-    Install-Addon funkydude/BugSack
+    Install-Addon owner/MyAddon
 
 .EXAMPLE
-    Install-Addon Breeni/BtWQuestsDragonflight -Branch mainline
+    Install-Addon owner/MyAddon -Branch mainline
 
 .NOTES
     Requires GitHub CLI (gh) and authentication.
@@ -57,7 +57,7 @@ $ErrorActionPreference = 'Stop'
 
 # Validate repo format
 if ($Repo -notmatch '^[\w\-\.]+/[\w\-\.]+$') {
-    Write-Host "Error: Invalid repo format. Use owner/repo (e.g. funkydude/BugSack)" -ForegroundColor Red
+    Write-Host "Error: Invalid repo format. Use owner/repo (e.g. owner/MyAddon)" -ForegroundColor Red
     return
 }
 
